@@ -46,27 +46,27 @@ const router = createRouter({
     {
       path:'/homeAdmin',
       name:'homeAdmin',
-      component: () => import('../views/admin/HomeView.vue')
+      component: () => import('../views/administrador/HomeView.vue')
     },
         {
       path:'/ProdutosAdmin',
       name:'ProdutosAdmin',
-      component: () => import('../views/admin/ProdutosView.vue')
+      component: () => import('../views/administrador/ProdutosView.vue')
     },
     {
       path:'/OrcamentoAdmin',
       name:'OrcamentoAdmin',
-      component: () => import('../views/admin/OrcamentoView.vue')
+      component: () => import('../views/administrador/OrcamentoView.vue')
     },
     {
       path:'/ProdutosAdmin',
       name:'ProdutosAdmin',
-      component: () => import('../views/admin/PedidosView.vue')
+      component: () => import('../views/administrador/PedidosView.vue')
     },
     {
       path:'/PerfilAdmin',
       name:'PerfilAdmin',
-      component: () => import('../views/admin/PerfilView.vue')
+      component: () => import('../views/administrador/PerfilView.vue')
     },
 
   ],

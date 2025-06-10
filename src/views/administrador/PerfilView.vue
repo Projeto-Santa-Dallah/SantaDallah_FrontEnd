@@ -1,3 +1,3 @@
 <template>
-    perfil cliente
+    perfil adm
 </template>
