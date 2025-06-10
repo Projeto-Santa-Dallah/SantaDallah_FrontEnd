@@ -1,0 +1,3 @@
+<template>
+    perfil cliente
+</template>

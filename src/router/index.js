@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,16 +6,69 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/cliente/HomeView.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/produtos',
+      name: 'produtos',
+      component : () => import('../views/cliente/ProdutosView.vue')
     },
+    {
+      path: '/produto',
+      name: 'produto',
+      component : () => import('../views/cliente/ProdutoView.vue')
+    },
+    {
+      path: '/orcamentos',
+      name: 'orcamentos',
+      component : () => import('../views/cliente/OrcamentoView.vue')
+    },
+    {
+      path: '/sobre',
+      name:'sobre',
+      component: () => import('../views/cliente/SobreView.vue')
+    },
+    {
+      path:'/atelie',
+      name:'atelie',
+      component: () => import('../views/cliente/AtelieView.vue')
+    },
+    {
+      path:'/Perfil',
+      name:'Perfil',
+      component: () => import('../views/cliente/PerfilView.vue')
+    },
+        {
+      path:'/carrinho',
+      name:'carrinho',
+      component: () => import('../views/cliente/CarrinhoView.vue')
+    },
+    {
+      path:'/homeAdmin',
+      name:'homeAdmin',
+      component: () => import('../views/administrador/HomeView.vue')
+    },
+        {
+      path:'/ProdutosAdmin',
+      name:'ProdutosAdmin',
+      component: () => import('../views/administrador/ProdutosView.vue')
+    },
+    {
+      path:'/OrcamentoAdmin',
+      name:'OrcamentoAdmin',
+      component: () => import('../views/administrador/OrcamentoView.vue')
+    },
+    {
+      path:'/ProdutosAdmin',
+      name:'ProdutosAdmin',
+      component: () => import('../views/administrador/PedidosView.vue')
+    },
+    {
+      path:'/PerfilAdmin',
+      name:'PerfilAdmin',
+      component: () => import('../views/administrador/PerfilView.vue')
+    },
+
   ],
 })
 
