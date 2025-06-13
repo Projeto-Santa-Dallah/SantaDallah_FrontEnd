@@ -5,70 +5,74 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: () => import('../views/cliente/HomeView.vue'),
     },
     {
       path: '/produtos',
-      name: 'produtos',
-      component : () => import('../views/cliente/ProdutosView.vue')
+      name: 'Doces',
+      component: () => import('../views/cliente/ProdutosView.vue')
     },
     {
       path: '/produto',
-      name: 'produto',
-      component : () => import('../views/cliente/ProdutoView.vue')
+      name: 'Produto',
+      component: () => import('../views/cliente/ProdutoView.vue')
     },
     {
       path: '/orcamentos',
-      name: 'orcamentos',
-      component : () => import('../views/cliente/OrcamentoView.vue')
+      name: 'Orçamentos',
+      component: () => import('../views/cliente/OrcamentoView.vue')
     },
     {
       path: '/sobre',
-      name:'sobre',
+      name: 'Sobre',
       component: () => import('../views/cliente/SobreView.vue')
     },
     {
-      path:'/atelie',
-      name:'atelie',
+      path: '/atelie',
+      name: 'Ateliê',
       component: () => import('../views/cliente/AtelieView.vue')
     },
     {
-      path:'/Perfil',
-      name:'Perfil',
+      path: '/perfil',
+      name: 'Perfil',
       component: () => import('../views/cliente/PerfilView.vue')
     },
-        {
-      path:'/carrinho',
-      name:'carrinho',
+    {
+      path: '/carrinho',
+      name: 'Carrinho',
       component: () => import('../views/cliente/CarrinhoView.vue')
     },
     {
-      path:'/homeAdmin',
-      name:'homeAdmin',
+      path: '/homeAdmin',
+      name: 'Home Admin',
       component: () => import('../views/administrador/HomeView.vue')
     },
-        {
-      path:'/ProdutosAdmin',
-      name:'ProdutosAdmin',
+    {
+      path: '/produtosAdmin',
+      name: 'Produtos Admin',
       component: () => import('../views/administrador/ProdutosView.vue')
     },
     {
-      path:'/OrcamentoAdmin',
-      name:'OrcamentoAdmin',
+      path: '/orcamentoAdmin',
+      name: 'Orçamento Admin',
       component: () => import('../views/administrador/OrcamentoView.vue')
     },
     {
-      path:'/ProdutosAdmin',
-      name:'ProdutosAdmin',
+      path: '/pedidosAdmin',
+      name: 'Pedidos Admin',
       component: () => import('../views/administrador/PedidosView.vue')
     },
     {
-      path:'/PerfilAdmin',
-      name:'PerfilAdmin',
+      path: '/perfilAdmin',
+      name: 'Perfil Admin',
       component: () => import('../views/administrador/PerfilView.vue')
     },
-
+    {
+      path: '/tamanhosAdmin',
+      name: 'Tamanhos Admin',
+      component: () => import('../views/administrador/TamanhoView.vue')
+    }
   ],
 })
 

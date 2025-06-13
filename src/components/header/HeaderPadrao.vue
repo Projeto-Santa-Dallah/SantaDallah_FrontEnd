@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import ListaNav from '../header/ListaNav.vue';
 import AcoesUsuario from '../header/AcoesUsuario.vue';
+import PadraoCaminho from '../caminho/PadraoCaminho.vue';
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import AcoesUsuario from '../header/AcoesUsuario.vue';
     </nav>
     <AcoesUsuario/>
   </header>
+  <PadraoCaminho/>
 </template>
 
 <style scoped>

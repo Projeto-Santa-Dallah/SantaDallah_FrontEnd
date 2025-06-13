@@ -1,17 +1,17 @@
 <script setup>
 import AdminFiltro from '@/components/filtros/AdminFiltro.vue';
-import AddProduto from '@/components/filtros/AddProduto.vue';
-import ProdutosAdm from '@/components/administrador/ProdutosAdm.vue';
+import AddTamanho from '@/components/filtros/AddTamanho.vue';
+import TamanhosAdm from '@/components/administrador/TamanhosAdm.vue';
 </script>
 
 <template>   
     <div class="produtos-header">
         <h1 class="titulo-produtos">Produtos</h1>
     </div>
-  <AddProduto/>
+  <AddTamanho/>
     <div class="filtro-produtos">
         <AdminFiltro/>
-        <ProdutosAdm/>
+        <TamanhosAdm/>
 
 </div>
 </template>

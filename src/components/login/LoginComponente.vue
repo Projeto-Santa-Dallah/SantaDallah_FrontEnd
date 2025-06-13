@@ -1,13 +1,24 @@
 <script setup>
 import { ref } from 'vue'
-import { useTemplateStore } from '@/stores/template/template';
+import { useRouter } from 'vue-router'
+import { useTemplateStore } from '@/stores/template/template'
+
 const TemplateStore = useTemplateStore()
+const router = useRouter()
 const login = ref(false)
+
 const selecionar = (isAdmin) => {
-  TemplateStore.isAdmin = isAdmin;
-  login.value = true;
+  TemplateStore.isAdmin = isAdmin
+  login.value = true
+
+  if (isAdmin) {
+    router.push('/homeAdmin')
+  } else {
+    router.push('/')
+  }
 }
 </script>
+
 
 <template>
   <div v-if="login == false" class="container">
