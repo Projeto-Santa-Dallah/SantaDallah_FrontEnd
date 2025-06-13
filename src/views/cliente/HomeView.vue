@@ -37,18 +37,19 @@
   height: 100%;
 }
 .bolo {
-  width: 600px;
+  height: 80vh;
 }
 .itens {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  padding: 35px 99px;
+  padding: 0px 99px;
 }
 .titulos{
     width: 40%;
 }
 h1{
+    margin-top: 0;
     color:#191645;
     font-size: 40px;
 }
