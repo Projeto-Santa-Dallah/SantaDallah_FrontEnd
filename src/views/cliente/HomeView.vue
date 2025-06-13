@@ -3,9 +3,9 @@
     <div class="fundo"><img src="@/assets/imagens/fundo.png" /></div>
     <div class="itens">
       <div class="titulos">
-        <h1>Trazendo mais doçura e amor para o seu momento especial.</h1>
+        <h1>Trazendo mais doçura e <br/> amor para o seu <br/> momento especial.</h1>
         <h2>
-          Sempre trabalhando e pensando com muito amor e dedicação para levar o melhor
+          Sempre trabalhando e pensando com muito amor e <br/> dedicação para levar o melhor
           para vocês.
         </h2>
         <button>
@@ -37,18 +37,16 @@
   height: 100%;
 }
 .bolo {
-  width: 600px;
+  height: 70vh;
 }
 .itens {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  padding: 35px 99px;
-}
-.titulos{
-    width: 40%;
+  padding: 0px 99px;
 }
 h1{
+    margin-top: 0;
     color:#191645;
     font-size: 40px;
 }

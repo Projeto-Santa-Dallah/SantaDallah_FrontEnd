@@ -1,73 +1,50 @@
 <script setup>
 import { ref, reactive, watch } from "vue";
 
-const openAddTamanho = ref(false);
+const openAddCategoria = ref(false);
 
-const tamanho = reactive({
+const Categoria = reactive({
   id: null,
   nome: "",
-  qtdFatia: null,
-  massakg: "",
-  formato: "",
-  categoria: {
-    id: null,
+  descricao: "",
+  }
+);
+
+watch(openAddCategoria, (novoValor) => {
+  if (!novoValor) {
+    Object.assign(Categoria, {
+    id: null,    
     nome: "",
     descricao: "",
-  }
-});
-
-watch(openAddTamanho, (novoValor) => {
-  if (!novoValor) {
-    Object.assign(tamanho, {
-      id: null,
-      nome: "",
-      qtdFatia: null,
-      massakg: "",
-      formato: "",
-      categoria: {
-        id: null,
-        nome: "",
-        descricao: "",
-      }
     });
   }
 });
 
-function adicionarTamanho() {
-  console.log("Tamanho adicionado:", tamanho);
-  openAddTamanho.value = false;
+function adicionarCategoria() {
+  console.log("Categoria adicionado:", Categoria);
+  openAddCategoria.value = false;
 }
 </script>
 
 <template>
-  <div @click="openAddTamanho = true" class="produto-button">
+  <div @click="openAddCategoria = true" class="produto-button">
     <button>+</button>
-    <span>Adicionar novo tamanho</span>
+    <span>Adicionar nova Categoria</span>
   </div>
 
-  <div class="container-add-produto" v-if="openAddTamanho">
+  <div class="container-add-produto" v-if="openAddCategoria">
     <div class="container">
       <div class="div-fechar">
-        <button class="fechar" @click="openAddTamanho = false">x</button>
+        <button class="fechar" @click="openAddCategoria = false">x</button>
       </div>
 
-      <form @submit.prevent="adicionarTamanho">
+      <form @submit.prevent="adicionarCategoria">
         <label for="nome">Nome*</label>
-        <input v-model="tamanho.nome" id="nome" type="text" required />
+        <input v-model="Categoria.nome" id="nome" type="text" required />
+        <label for="descricao">Descricao</label>
+        <input v-model="Categoria.descricao" id="descricao" type="text" />
 
-        <label for="qtdFatia">Qtd de Fatias*</label>
-        <input v-model="tamanho.qtdFatia" id="qtdFatia" type="number" required />
-
-        <label for="massa">Massa (kg)*</label>
-        <input v-model="tamanho.massakg" id="massa" type="text" required />
-
-        <label for="formato">Formato*</label>
-        <input v-model="tamanho.formato" id="formato" type="text" required />
-
-        <label for="categoria">Categoria</label>
-        <input v-model="tamanho.categoria.nome" id="categoria" type="text" />
-
-        <button class="button" type="submit">Cadastrar Tamanho</button>
+        <button class="button" type="submit">Cadastrar Categoria</button>
       </form>
     </div>
   </div>

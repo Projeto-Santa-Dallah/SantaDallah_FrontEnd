@@ -1,31 +1,31 @@
 <script setup>
 import AdminFiltro from '@/components/filtros/AdminFiltro.vue';
-import AddTamanho from '@/components/filtros/AddTamanho.vue';
-import TamanhosAdm from '@/components/administrador/TamanhosAdm.vue';
+import AddCategoria from '@/components/filtros/AddCategoria.vue';
+import CategoriasAdm from '@/components/administrador/CategoriasAdm.vue';
 </script>
 
 <template>   
-    <div class="tamanhos-header">
-        <h1 class="titulo-tamanhos">Tamanhos</h1>
+    <div class="categorias-header">
+        <h1 class="titulo-categorias">Categorias</h1>
     </div>
-  <AddTamanho/>
-    <div class="filtro-tamanhos">
+  <AddCategoria/>
+    <div class="filtro-categorias">
         <AdminFiltro/>
-        <TamanhosAdm/>
+        <CategoriasAdm/>
 
 </div>
 </template>
 <style scoped>
-.filtro-tamanhos{
+.filtro-categorias{
     display: flex;
     flex-direction: row;
 }
-.titulo-tamanhos {
+.titulo-categorias {
     font-size: 24px;
     padding: 50px;
     font-weight: 600;
 }
-.tamanhos-header {
+.categorias-header {
     display: flex;
     flex-direction: column;
     align-items: center;

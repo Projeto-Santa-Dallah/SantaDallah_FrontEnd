@@ -164,7 +164,7 @@
     height: min-content;
     justify-content: center;
     align-items: center;
-    width: 700px;
+    width: 55vw;
     border: 1px solid #191645;
     border-radius: 16px;
     padding: 16px;

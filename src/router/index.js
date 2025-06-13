@@ -72,6 +72,11 @@ const router = createRouter({
       path: '/tamanhosAdmin',
       name: 'Tamanhos Admin',
       component: () => import('../views/administrador/TamanhoView.vue')
+    },
+    {
+      path: '/categoriasAdmin',
+      name: 'Categorias Admin',
+      component: () => import('../views/administrador/CategoriasView.vue')
     }
   ],
 })

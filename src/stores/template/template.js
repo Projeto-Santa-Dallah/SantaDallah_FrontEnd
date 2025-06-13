@@ -19,8 +19,9 @@ export const useTemplateStore = defineStore('template', () => {
   const adminTitles = [
     { text: 'Home', link: '/homeAdmin' },
     { text: 'Doces', link: '/produtosAdmin' },
-    { text: 'Orçamento', link: '/orcamentoAdmin' },
     { text: 'Tamanhos', link: '/tamanhosAdmin' },
+    { text: 'Categorias', link: '/categoriasAdmin' },
+    { text: 'Orçamento', link: '/orcamentoAdmin' },
     { text: 'Perfil', link: '/perfilAdmin' }
   ]
 
