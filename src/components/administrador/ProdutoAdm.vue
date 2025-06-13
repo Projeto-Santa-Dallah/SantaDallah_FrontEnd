@@ -5,7 +5,8 @@ import { useRoute } from 'vue-router'
 const props = defineProps({
     id: Number,
     nome: String,
-    preco: String
+    preco: String,
+    foto: String
 })
 // const imgSrc = computed(() => {
 //   return new URL(`../../assets/images/${props.img}.png`, import.meta.url).href
@@ -14,7 +15,7 @@ const props = defineProps({
 <template>
     <div class="tudo">
         <div class="info-principal">
-            <img class="img" src="@/assets/imagens/bolo.png" />
+            <img class="img" :src="foto" />
             <div class="nome-container">
                 <span class="nome">{{ nome }}</span>
                 <span class="detalhes">ver detalhes</span>
