@@ -35,7 +35,6 @@ watch(openAddTamanho, (novoValor) => {
 
 function adicionarTamanho() {
   console.log("Tamanho adicionado:", tamanho);
-  // Aqui você pode emitir um evento, chamar uma API ou atualizar um store
   openAddTamanho.value = false;
 }
 </script>

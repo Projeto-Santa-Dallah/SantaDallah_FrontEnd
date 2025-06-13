@@ -5,27 +5,27 @@ import TamanhosAdm from '@/components/administrador/TamanhosAdm.vue';
 </script>
 
 <template>   
-    <div class="produtos-header">
-        <h1 class="titulo-produtos">Produtos</h1>
+    <div class="tamanhos-header">
+        <h1 class="titulo-tamanhos">Tamanhos</h1>
     </div>
   <AddTamanho/>
-    <div class="filtro-produtos">
+    <div class="filtro-tamanhos">
         <AdminFiltro/>
         <TamanhosAdm/>
 
 </div>
 </template>
 <style scoped>
-.filtro-produtos{
+.filtro-tamanhos{
     display: flex;
     flex-direction: row;
 }
-.titulo-produtos {
+.titulo-tamanhos {
     font-size: 24px;
     padding: 50px;
     font-weight: 600;
 }
-.produtos-header {
+.tamanhos-header {
     display: flex;
     flex-direction: column;
     align-items: center;
