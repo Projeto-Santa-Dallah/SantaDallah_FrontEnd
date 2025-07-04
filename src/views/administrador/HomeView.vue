@@ -1,3 +1,6 @@
+<script setup>
+import OrcamentoProduto from '@/components/administrador/grafico/OrcamentoProduto.vue'
+</script>
 <template>
     <div class="conteiner">
       <div class="coluna-esquerda">
@@ -33,11 +36,7 @@
   
       <div class="coluna-direita">
         <div class="grafico-container">
-          <img
-            src="@/assets/imagens/grafico.png"
-            alt="Gráfico de Orçamentos e Pedidos"
-            class="grafico-imagem"
-          />
+          <OrcamentoProduto/>
         </div>
       </div>
     </div>
