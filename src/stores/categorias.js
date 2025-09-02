@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 
-import CategoriaApi from '@/service/categoria'
+import CategoriaApi from '@/service/categorias'
 
 
 const categoriaApi = new CategoriaApi()
