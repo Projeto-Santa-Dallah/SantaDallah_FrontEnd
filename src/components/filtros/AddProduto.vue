@@ -1,7 +1,15 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
+import { useCategoriaStore } from "@/stores/categorias";
+import { useTamanhoStore } from "@/stores/tamanhos";
+import { useProdutosStore } from "@/stores/produtos";
+const useCategorias = useCategoriaStore()
+const categoriaSelecionada = ref()
+const useTamanhos = useTamanhoStore()
+const tamanhoSelecionado = ref()
+const useProdutos = useProdutosStore()
 
-const openAddProduct = ref(false);
+const openAddProduto = ref(false);
 const produto = reactive({
   id: null,
   nome: "",
@@ -10,24 +18,12 @@ const produto = reactive({
   validade: null,
   preco: "",
   sabor: "",
-  tamanho: {
-    id: null,
-    nome: "",
-    qtdFatia: null,
-    massakg: "",
-    formato: "",
-    categoria: null,
-  },
-  categoria: [
-    {
-      id: null,
-      nome: "",
-      descricao: "",
-    }
-  ]
+  tamanho: null,
+  categoria: [],
+  foto: []
 });
 
-watch(openAddProduct, (newValue) => {
+watch(openAddProduto, (newValue) => {
   if (!newValue) {
     Object.assign(produto, {
       id: null,
@@ -37,36 +33,43 @@ watch(openAddProduct, (newValue) => {
       validade: null,
       preco: "",
       sabor: "",
-      tamanho: {
-        id: null,
-        nome: "",
-        qtdFatia: null,
-        massakg: "",
-        formato: "",
-        categoria: null,
-      },
-      categoria: [
-        {
-          id: null,
-          nome: "",
-          descricao: "",
-        }
-      ]
+      tamanho: null,
+      categoria: [],
+      foto: []
     });
   }
 });
+
+async function adicionarProduto() {
+  try {
+    produto.categoria = categoriaSelecionada.value;
+    produto.tamanho = tamanhoSelecionado.value;
+    await useProdutos.salvarProduto({ ...produto}); // chama o store
+    openAddProduto.value = false;
+  } catch {
+    console.log("Erro ao saLvar produto");
+  }
+}
+
+
+onMounted(() => {
+  useProdutos.getProduct();
+  useCategorias.getCategorias();
+  useTamanhos.getTamanhos();
+});
+
 </script>
 
 <template>
-  <div @click="openAddProduct = true" class="produto-button">
+  <div @click="openAddProduto = true" class="produto-button">
     <button>+</button>
     <span>Adicionar novo produto</span>
   </div>
 
-  <div class="container-add-produto" v-if="openAddProduct">
+  <div class="container-add-produto" v-if="openAddProduto">
     <div class="container">
       <div class="div-fechar">
-        <button class="fechar" @click="openAddProduct = false">x</button>
+        <button class="fechar" @click="openAddProduto = false">x</button>
       </div>
 
       <form @submit.prevent="adicionarProduto">
@@ -95,21 +98,25 @@ watch(openAddProduct, (newValue) => {
         <input v-model="produto.sabor" id="sabor" type="text" required />
 
         <!-- Tamanho -->
-        <label for="tamanhoNome">Tamanho (nome)</label>
-        <input v-model="produto.tamanho.nome" id="tamanhoNome" type="text" />
+        <label for="tamanho">Tamanho*</label>
+        <select name="" id="" v-model="tamanhoSelecionado">
+          <option disabled value="">-- Escolha uma opção --</option>
+          <option v-for="tamanho in useTamanhos.tamanhos" :key="tamanho.id" :value="tamanho.id">{{
+            tamanho.nome }}</option>
+        </select>
 
-        <label for="qtdFatia">Qtd de Fatias</label>
-        <input v-model="produto.tamanho.qtdFatia" id="qtdFatia" type="number" />
+        <!-- <label for="massa">Massa (kg)</label>
+        <input v-model="produto.tamanho.massakg" id="massa" type="text" /> -->
 
-        <label for="massa">Massa (kg)</label>
-        <input v-model="produto.tamanho.massakg" id="massa" type="text" />
+        <!-- <label for="formato">Formato</label>
+        <input v-model="produto.tamanho.formato" id="formato" type="text" /> -->
 
-        <label for="formato">Formato</label>
-        <input v-model="produto.tamanho.formato" id="formato" type="text" />
-
-        <!-- Categoria principal (apenas 1 ou várias) -->
-        <label for="categoria">Categoria*</label>
-        <input v-model="produto.categoria[0].nome" id="categoria" type="text" />
+       <label for="categoria">Categoria*</label>
+        <select name="" id="" v-model="categoriaSelecionada" multiple>
+          <option disabled value="">-- Escolha uma opção --</option>
+          <option v-for="categoria in useCategorias.categorias" :key="categoria.id" :value="categoria.id">{{
+            categoria.nome }}</option>
+        </select>
 
         <button class="button" type="submit">Cadastrar Produto</button>
       </form>

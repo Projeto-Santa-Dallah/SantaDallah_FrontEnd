@@ -1,6 +1,6 @@
 <script setup>
 import ProdutoAdm from "./ProdutoAdm.vue";
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useProdutosStore } from '@/stores/produtos'
 
 
@@ -68,7 +68,7 @@ onMounted(async () => {
 <template>
  <div class="produtos">
  <!-- {{ produtosStore.produtos.results }} -->
-  <div class="produto" v-for="produto in produtosStore.produtos.results" :key="produto.id">
+  <div class="produto" v-for="produto in produtosStore.produtos" :key="produto.id">
      <ProdutoAdm
        :id="produto.id"
        :nome="produto.nome"

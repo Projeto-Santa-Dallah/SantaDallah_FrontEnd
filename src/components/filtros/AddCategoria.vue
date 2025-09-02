@@ -1,32 +1,45 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
+
+import { ref, reactive, watch, onMounted } from "vue";
+import { useCategoriaStore } from "@/stores/categorias"; // importa o store
 
 const openAddCategoria = ref(false);
+const categoriaStore = useCategoriaStore();
+
 
 const Categoria = reactive({
   id: null,
   nome: "",
   descricao: "",
-  }
-);
+});
 
 watch(openAddCategoria, (novoValor) => {
   if (!novoValor) {
     Object.assign(Categoria, {
-    id: null,    
-    nome: "",
-    descricao: "",
+      id: null,
+      nome: "",
+      descricao: "",
     });
   }
 });
 
-function adicionarCategoria() {
-  console.log("Categoria adicionado:", Categoria);
-  openAddCategoria.value = false;
+async function adicionarCategoria() {
+  try {
+    await categoriaStore.salvarCategoria({ ...Categoria }); // chama o store
+    openAddCategoria.value = false;
+  } catch {
+    console.log("Erro ao salvar categoria:");
+  }
 }
+
+
+onMounted(() => {
+  categoriaStore.getCategorias();
+});
 </script>
 
 <template>
+
   <div @click="openAddCategoria = true" class="produto-button">
     <button>+</button>
     <span>Adicionar nova Categoria</span>
@@ -41,22 +54,23 @@ function adicionarCategoria() {
       <form @submit.prevent="adicionarCategoria">
         <label for="nome">Nome*</label>
         <input v-model="Categoria.nome" id="nome" type="text" required />
-        <label for="descricao">Descricao</label>
+
+        <label for="descricao">Descrição</label>
         <input v-model="Categoria.descricao" id="descricao" type="text" />
 
         <button class="button" type="submit">Cadastrar Categoria</button>
       </form>
     </div>
   </div>
+
+
 </template>
-
 <style scoped>
-/* Reutilizando os estilos do addProduto */
-
 .fechar {
   background-color: transparent;
   border: none;
 }
+
 .div-fechar {
   text-align: end;
   width: 100%;
