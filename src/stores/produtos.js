@@ -11,55 +11,39 @@ export const useProdutosStore = defineStore('produtos', () => {
  const produtoDetalhado = ref(null)
 
 
-   const carregarProdutos = async () => {
-   produtos.value = await produtosService.BuscarTodosOsProdutos();
-    console.log(produtos.value)
-};
+ async function carregarProdutos() {
+  const data = await produtosService.BuscarTodosOsProdutos()
+  // garante que seja sempre um array
+  produtos.value = Array.isArray(data.results) ? data.results : []
+}
 
   const carregarProdutoDetalhado = async (id) => {
-    produtoDetalhado.value = await produtosService.BuscarProdutoPorId(id)
+    produtoDetalhado.value = await produtosService.carregarProdutoDetalhado(id)
   }
 
 
  function getProduct(id) {
-   return produtos.value.find((produto) => produto.id === id)
+   if (!Array.isArray(produtos.value)) return null
+  return produtos.value.find(produto => produto.id === id)
  }
 
 
- function addProduto({
-   nome,
-   descricao,
-   tipo,
-   validade,
-   preco,
-   sabor,
-   foto = [],
-   tamanho = {},
-   categoria = [],
- }) {
-   const novoId = produtos.value.length > 0 ? produtos.value[produtos.value.length - 1].id + 1 : 1
-
-
-   const novoProduto = {
-     id: novoId,
-     nome,
-     descricao,
-     tipo,
-     validade,
-     preco,
-     sabor,
-     foto,
-     tamanho,
-     categoria,
+ async function salvarProduto(produto) {
+   if (produto.id) {
+     await produtosService.AtualizarProduto(produto)
+     const index = produtos.value.findIndex((p) => p.id === produto.id)
+     produtos.value.splice(index, 1, produto)
+   } else {
+     const data = await produtosService.AdcionarProduto(produto)
+     produtos.value.splice(0, 0, data)
    }
-
-
-   produtos.value.push(novoProduto)
-
-
-   alert(`Produto adicionado: ${JSON.stringify(novoProduto, null, 2)}`)
  }
 
+   async function excluirProduto(id) {
+   await produtosService.DeletarProduto(id)
+   const index = produtos.value.findIndex((produto) => produto.id === id)
+   produtos.value.splice(index, 1)
+ }
 
  return {
    produtos,
@@ -67,6 +51,9 @@ export const useProdutosStore = defineStore('produtos', () => {
    carregarProdutos,
    carregarProdutoDetalhado,
    getProduct,
-   addProduto,
+   salvarProduto,
+   excluirProduto
  }
 })
+
+
