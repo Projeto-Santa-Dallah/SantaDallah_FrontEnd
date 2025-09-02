@@ -1,37 +1,43 @@
 <script setup>
+import { onMounted } from 'vue';
 import TamanhoAdm from './TamanhoAdm.vue'
+import { useTamanhoStore } from '@/stores/tamanhos';
+const tamanhoStore = useTamanhoStore();
+onMounted(() => {
+  tamanhoStore.getTamanhos();
+});
 
-const tamanhos = [
-  {
-    id: 1,
-    nome: 'P',
-    qtdFatia: 6,
-    massakg: '0.00',
-    formato: 'redondo',
-    categoria: {
-      id: 1,
-      nome: 'Torta',
-      descricao: 'Produto doce a base de farinha com recheios variados.'
-    }
-  },
-  {
-    id: 2,
-    nome: 'M',
-    qtdFatia: 8,
-    massakg: '0.50',
-    formato: 'quadrado',
-    categoria: {
-      id: 2,
-      nome: 'Bolo',
-      descricao: 'Bolo tradicional com cobertura.'
-    }
-  }
-]
+// const tamanhos = [
+//   {
+//     id: 1,
+//     nome: 'P',
+//     qtdFatia: 6,
+//     massakg: '0.00',
+//     formato: 'redondo',
+//     categoria: {
+//       id: 1,
+//       nome: 'Torta',
+//       descricao: 'Produto doce a base de farinha com recheios variados.'
+//     }
+//   },
+//   {
+//     id: 2,
+//     nome: 'M',
+//     qtdFatia: 8,
+//     massakg: '0.50',
+//     formato: 'quadrado',
+//     categoria: {
+//       id: 2,
+//       nome: 'Bolo',
+//       descricao: 'Bolo tradicional com cobertura.'
+//     }
+//   }
+// ]
 </script>
 
 <template>
   <div class="tamanhos">
-    <div class="tamanho" v-for="tamanho in tamanhos" :key="tamanho.id">
+    <div class="tamanho" v-for="tamanho in tamanhoStore.tamanhos" :key="tamanho.id">
       <TamanhoAdm
         :id="tamanho.id"
         :nome="tamanho.nome"

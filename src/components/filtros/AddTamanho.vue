@@ -1,19 +1,21 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
-
+import { ref, reactive, watch, onMounted} from "vue";
+import { useCategoriaStore } from "@/stores/categorias";
+import { useTamanhoStore } from "@/stores/tamanhos";
+const useCategorias = useCategoriaStore()
+const useTamanho = useTamanhoStore()
+onMounted(() => {
+  useCategorias.getCategorias();
+});
 const openAddTamanho = ref(false);
-
+const categoriaSelecionada = ref()
 const tamanho = reactive({
   id: null,
   nome: "",
   qtdFatia: null,
   massakg: "",
   formato: "",
-  categoria: {
-    id: null,
-    nome: "",
-    descricao: "",
-  }
+  categoria: ""
 });
 
 watch(openAddTamanho, (novoValor) => {
@@ -24,19 +26,26 @@ watch(openAddTamanho, (novoValor) => {
       qtdFatia: null,
       massakg: "",
       formato: "",
-      categoria: {
-        id: null,
-        nome: "",
-        descricao: "",
-      }
+      categoria: null
     });
   }
 });
 
-function adicionarTamanho() {
-  console.log("Tamanho adicionado:", tamanho);
-  openAddTamanho.value = false;
+
+async function adicionarTamanho() {
+  try {
+    tamanho.categoria = categoriaSelecionada.value;
+    await useTamanho.salvarTamanho({ ...tamanho }); // chama o store
+    openAddTamanho.value = false;
+  } catch {
+    console.log("Erro ao salvar tamanho:");
+  }
 }
+
+
+onMounted(() => {
+  useTamanho.getTamanhos();
+});
 </script>
 
 <template>
@@ -64,8 +73,12 @@ function adicionarTamanho() {
         <label for="formato">Formato*</label>
         <input v-model="tamanho.formato" id="formato" type="text" required />
 
-        <label for="categoria">Categoria</label>
-        <input v-model="tamanho.categoria.nome" id="categoria" type="text" />
+        <label for="categoria">Categoria*</label>
+        <select name="" id="" v-model="categoriaSelecionada">
+          <option disabled value="">-- Escolha uma opção --</option>
+          <option v-for="categoria in useCategorias.categorias" :key="categoria.value" :value="categoria.id">{{
+            categoria.nome }}</option>
+        </select>
 
         <button class="button" type="submit">Cadastrar Tamanho</button>
       </form>
@@ -80,6 +93,7 @@ function adicionarTamanho() {
   background-color: transparent;
   border: none;
 }
+
 .div-fechar {
   text-align: end;
   width: 100%;
