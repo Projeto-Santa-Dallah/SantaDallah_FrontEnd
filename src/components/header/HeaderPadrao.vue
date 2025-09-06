@@ -7,6 +7,7 @@ import PadraoCaminho from '../caminho/PadraoCaminho.vue';
 </script>
 
 <template>
+  <div class="container-header">
   <header>
     <img class="logo" src="@/assets/imagens/logo.png" />
     <nav>
@@ -14,15 +15,20 @@ import PadraoCaminho from '../caminho/PadraoCaminho.vue';
     </nav>
     <AcoesUsuario/>
   </header>
+</div>
   <PadraoCaminho/>
 </template>
 
 <style scoped>
+
 header {
+  position: absolute;
+  top:0;
+  width: 84.5%;
   display: flex;
   align-items: center;
   background-color: rgba(0, 255, 255, 0);
-  padding: 30px 100px;
+  padding: 20px 100px;
 }
 
 .logo {
