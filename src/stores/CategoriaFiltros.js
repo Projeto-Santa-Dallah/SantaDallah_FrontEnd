@@ -53,9 +53,111 @@ const BrigadeirosAberto = ref(false);
 
     // Watcher para detectar mudanças na rota
     watch(route, resetFilters);
-  const admProdutos = ref([
-    {
-      titulo: "Bolo vovó Dallah",
+  // const admProdutos = ref([
+  //   {
+  //     titulo: "Bolo vovó Dallah",
+  //     funcao: () => {
+  //       watchBoloVovoDallah.value = [];
+  //       FiltrosStore.boloVovoDallah = [];
+  //       BoloVovoDallahAberto.value = false;
+  //     },
+  //     aberto: BoloVovoDallahAberto,
+  //     model: watchBoloVovoDallah,
+  //     array: [
+  //       {
+  //         nome: "Sabor",
+  //         value: "Sabor",
+  //       },
+  //       {
+  //         nome: "Tamanho",
+  //         value: "Tamanho",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     titulo: "Bolos decorados",
+  //     funcao: () => {
+  //       watchBoloDecorado.value = [];
+  //       FiltrosStore.BoloDecorado = [];
+  //       BoloDecoradoAberto.value = false;
+  //     },
+  //     aberto: BoloDecoradoAberto,
+  //     model: watchBoloDecorado,
+  //     array: [
+  //       {
+  //         nome: "Sabor",
+  //         value: "Sabor",
+  //       },
+  //       {
+  //         nome: "Tamanho",
+  //         value: "Tamanho",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     titulo: "Bolo vulcão",
+  //     funcao: () => {
+  //       watchBoloVulcao.value = [];
+  //       FiltrosStore.boloVulcao = [];
+  //       BoloVulcaosAberto.value = false;
+  //     },
+  //     aberto: BoloVulcaosAberto,
+  //     model: watchBoloVulcao,
+  //     array: [
+  //       {
+  //         nome: "Sabor",
+  //         value: "Sabor",
+  //       },
+  //       {
+  //         nome: "Tamanho",
+  //         value: "Tamanho",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     titulo: "Tortas",
+  //     funcao: () => {
+  //       watchTortas.value = [];
+  //       FiltrosStore.tortas = [];
+  //       TortasAberto.value = false;
+  //     },
+  //     aberto: TortasAberto,
+  //     model: watchTortas,
+  //     array: [
+  //       {
+  //         nome: "Sabor",
+  //         value: "Sabor",
+  //       },
+  //       {
+  //         nome: "Tamanho",
+  //         value: "Tamanho",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     titulo: "Brigadeiros",
+  //     funcao: () => {
+  //       watchBrigadeiros.value = [];
+  //       FiltrosStore.brigadeiros = [];
+  //       BrigadeirosAberto.value = false;
+  //     },
+  //     aberto: BrigadeirosAberto,
+  //     model: watchBrigadeiros,
+  //     array: [
+  //       {
+  //         nome: "Sabor",
+  //         value: "Sabor",
+  //       },
+  //       {
+  //         nome: "Tamanho",
+  //         value: "Tamanho",
+  //       },
+  //     ],
+  //   },
+  // ]);
+   const admProdutos = ref([
+     {
+      titulo: "Todos",
       funcao: () => {
         watchBoloVovoDallah.value = [];
         FiltrosStore.boloVovoDallah = [];
@@ -63,19 +165,19 @@ const BrigadeirosAberto = ref(false);
       },
       aberto: BoloVovoDallahAberto,
       model: watchBoloVovoDallah,
-      array: [
-        {
-          nome: "Sabor",
-          value: "Sabor",
-        },
-        {
-          nome: "Tamanho",
-          value: "Tamanho",
-        },
-      ],
     },
     {
-      titulo: "Bolos decorados",
+      titulo: "Em andamento",
+      funcao: () => {
+        watchBoloVovoDallah.value = [];
+        FiltrosStore.boloVovoDallah = [];
+        BoloVovoDallahAberto.value = false;
+      },
+      aberto: BoloVovoDallahAberto,
+      model: watchBoloVovoDallah,
+    },
+    {
+      titulo: "Entregues",
       funcao: () => {
         watchBoloDecorado.value = [];
         FiltrosStore.BoloDecorado = [];
@@ -83,19 +185,9 @@ const BrigadeirosAberto = ref(false);
       },
       aberto: BoloDecoradoAberto,
       model: watchBoloDecorado,
-      array: [
-        {
-          nome: "Sabor",
-          value: "Sabor",
-        },
-        {
-          nome: "Tamanho",
-          value: "Tamanho",
-        },
-      ],
     },
     {
-      titulo: "Bolo vulcão",
+      titulo: "Cancelados",
       funcao: () => {
         watchBoloVulcao.value = [];
         FiltrosStore.boloVulcao = [];
@@ -103,56 +195,6 @@ const BrigadeirosAberto = ref(false);
       },
       aberto: BoloVulcaosAberto,
       model: watchBoloVulcao,
-      array: [
-        {
-          nome: "Sabor",
-          value: "Sabor",
-        },
-        {
-          nome: "Tamanho",
-          value: "Tamanho",
-        },
-      ],
-    },
-    {
-      titulo: "Tortas",
-      funcao: () => {
-        watchTortas.value = [];
-        FiltrosStore.tortas = [];
-        TortasAberto.value = false;
-      },
-      aberto: TortasAberto,
-      model: watchTortas,
-      array: [
-        {
-          nome: "Sabor",
-          value: "Sabor",
-        },
-        {
-          nome: "Tamanho",
-          value: "Tamanho",
-        },
-      ],
-    },
-    {
-      titulo: "Brigadeiros",
-      funcao: () => {
-        watchBrigadeiros.value = [];
-        FiltrosStore.brigadeiros = [];
-        BrigadeirosAberto.value = false;
-      },
-      aberto: BrigadeirosAberto,
-      model: watchBrigadeiros,
-      array: [
-        {
-          nome: "Sabor",
-          value: "Sabor",
-        },
-        {
-          nome: "Tamanho",
-          value: "Tamanho",
-        },
-      ],
     },
   ]);
 

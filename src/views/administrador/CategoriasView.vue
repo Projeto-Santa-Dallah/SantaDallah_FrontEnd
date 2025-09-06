@@ -5,30 +5,35 @@ import CategoriasAdm from '@/components/administrador/CategoriasAdm.vue';
 </script>
 
 <template>   
-    <div class="categorias-header">
-        <h1 class="titulo-categorias">Categorias</h1>
-    </div>
-  <AddCategoria/>
     <div class="filtro-categorias">
-        <AdminFiltro/>
-        <CategoriasAdm/>
+        <AdminFiltro><AddCategoria/></AdminFiltro>
+        <CategoriasAdm><div class="categorias-header">
+            <div class="header"><h1 class="titulo-categorias">Categorias</h1><span>  (58 encontrados)</span></div>
+    </div></CategoriasAdm>
 
 </div>
 </template>
 <style scoped>
+span{
+    color:#BF99C8;
+    font-size: 16px;
+}
+h1{
+    margin-right: 10px;
+    color: #191645;
+    font-size: 24px;
+}
+.header{
+    display: flex;
+    align-items: center;
+}
 .filtro-categorias{
     display: flex;
     flex-direction: row;
+    margin-top: 80px;
 }
 .titulo-categorias {
     font-size: 24px;
-    padding: 50px;
     font-weight: 600;
 }
-.categorias-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
 </style>

@@ -5,30 +5,36 @@ import TamanhosAdm from '@/components/administrador/TamanhosAdm.vue';
 </script>
 
 <template>   
-    <div class="tamanhos-header">
-        <h1 class="titulo-tamanhos">Tamanhos</h1>
-    </div>
-  <AddTamanho/>
     <div class="filtro-tamanhos">
-        <AdminFiltro/>
-        <TamanhosAdm/>
-
+        <AdminFiltro> <AddTamanho/></AdminFiltro>
+<TamanhosAdm>    
+    <div class="tamanhos-header">
+        <div class="header"><h1 class="titulo-tamanhos">Tamanhos</h1><span>  (58 encontrados)</span>
+   </div> </div>
+</TamanhosAdm>
 </div>
 </template>
 <style scoped>
+span{
+    color:#BF99C8;
+    font-size: 16px;
+}
+h1{
+    margin-right: 10px;
+    color: #191645;
+    font-size: 24px;
+}
+.header{
+    display: flex;
+    align-items: center;
+}
 .filtro-tamanhos{
     display: flex;
     flex-direction: row;
+    margin-top: 80px;
 }
 .titulo-tamanhos {
     font-size: 24px;
-    padding: 50px;
     font-weight: 600;
 }
-.tamanhos-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
 </style>

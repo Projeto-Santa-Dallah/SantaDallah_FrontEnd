@@ -48,6 +48,7 @@ onMounted(() => {
 
 <template>
   <div class="categorias">
+    <slot></slot>
     <div class="categoria" v-for="categoria in categoriaStore.categorias" :key="categoria.id">
       <CategoriaAdm
         :id="categoria.id"

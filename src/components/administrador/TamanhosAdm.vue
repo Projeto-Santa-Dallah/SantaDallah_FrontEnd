@@ -37,6 +37,7 @@ onMounted(() => {
 
 <template>
   <div class="tamanhos">
+    <slot></slot>
     <div class="tamanho" v-for="tamanho in tamanhoStore.tamanhos" :key="tamanho.id">
       <TamanhoAdm
         :id="tamanho.id"

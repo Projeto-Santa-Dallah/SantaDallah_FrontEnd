@@ -66,11 +66,12 @@ onMounted(() => {
 
 </template>
 <style scoped>
+/* Reutilizando os estilos do addProduto */
+
 .fechar {
   background-color: transparent;
   border: none;
 }
-
 .div-fechar {
   text-align: end;
   width: 100%;
@@ -99,15 +100,8 @@ onMounted(() => {
 }
 
 .produto-button {
-  margin-left: calc(15vw - 30px);
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  padding-right: 9vw;
-  margin-bottom: 20px;
   background-color: transparent;
   border: none;
-  justify-content: end;
 }
 
 .produto-button button {
@@ -121,7 +115,7 @@ onMounted(() => {
 }
 
 .produto-button span {
-  font-weight: 650;
+  font-weight: 600;
 }
 
 form {
@@ -143,5 +137,10 @@ form {
 
 .button:hover {
   background-color: #f285fa;
+}
+
+span{
+   color: #191645;
+   font-size: 15px;
 }
 </style>
