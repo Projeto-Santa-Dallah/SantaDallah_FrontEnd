@@ -1,14 +1,26 @@
 <script setup>
+import {ref} from 'vue'
 import AdminFiltro from '@/components/filtros/AdminFiltro.vue';
 import AddProduto from '@/components/filtros/AddProduto.vue';
 import ProdutosAdm from '@/components/administrador/ProdutosAdm.vue';
+import CadastrarProduto from '@/components/filtros/CadastrarProduto.vue'
+
+const openAddProduto = ref(false);
+
+function openProduto() {
+  openAddProduto.value = true;
+}
+function closeProduto() {
+  openAddProduto.value = false;
+}
 </script>
 
 <template>   
 
     <div class="filtro-produtos">
-        <AdminFiltro><AddProduto/></AdminFiltro>
-        <ProdutosAdm>  <div class="produtos-header">
+        <AdminFiltro><AddProduto @open="openProduto()" /></AdminFiltro>
+         <CadastrarProduto :open="openAddProduto" @close="closeProduto()" v-if="openAddProduto"/>
+        <ProdutosAdm v-else>  <div class="produtos-header">
         <div class="header"><h1 class="titulo-produtos">Produtos</h1><span>  (58 encontrados)</span>
   </div>  </div></ProdutosAdm>
 

@@ -40,7 +40,7 @@ onMounted(() => {
 
 <template>
 
-  <div @click="openAddCategoria = true" class="produto-button">
+  <div @click="$emit('open')" class="produto-button">
     <button>+</button>
     <span>Adicionar nova Categoria</span>
   </div>

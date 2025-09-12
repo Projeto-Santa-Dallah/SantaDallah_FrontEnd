@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div @click="openAddTamanho = true" class="produto-button">
+  <div @click="$emit('open')" class="produto-button">
     <button>+</button>
     <span>Adicionar novo tamanho</span>
   </div>
