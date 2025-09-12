@@ -39,7 +39,8 @@ const selecionar = (isAdmin) => {
   z-index: 11;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 84px);
+  margin-top: -84px !important;
   background-color: #f0baf4e5;
   top: 0
 }

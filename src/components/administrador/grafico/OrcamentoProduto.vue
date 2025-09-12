@@ -46,5 +46,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef"></canvas>
+  <canvas class="grafico-orcamento" ref="canvasRef"></canvas>
 </template>
+<style scoped>
+.grafico-orcamento{
+    width: 100%;
+    height: min-content;
+}
+</style>

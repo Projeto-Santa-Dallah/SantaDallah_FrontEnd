@@ -60,6 +60,7 @@ const nomesDasRotas = computed(() => {
   background-color: #F0BAF4;
   height: 50px;
   font-size: 14px;
+  margin-top: 84px;
 }
 
 .link {

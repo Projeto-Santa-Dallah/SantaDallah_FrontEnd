@@ -6,8 +6,9 @@ const CategoriaFiltrosStore = useCategoriaFiltroStore();
 
 <template>
   <div class="filtros">
-    <span class="subtitulo filtro-titulo">Filtros </span>
+    <span class="subtitulo filtro-titulo">Estado dos pedidos </span>
     <ItensSelect :filtroLista="CategoriaFiltrosStore.admProdutos" />
+     <slot></slot>
   </div>
 </template>
 <style scoped>
@@ -27,5 +28,7 @@ const CategoriaFiltrosStore = useCategoriaFiltroStore();
 .subtitulo {
   font-weight: 600;
   padding: 10px 0px;
+  color: #191645;
+  font-size: 16px;
 }
 </style>

@@ -67,6 +67,7 @@ onMounted(async () => {
 
 <template>
  <div class="produtos">
+  <slot></slot>
  <!-- {{ produtosStore.produtos.results }} -->
   <div class="produto" v-for="produto in produtosStore.produtos" :key="produto.id">
      <ProdutoAdm

@@ -7,9 +7,13 @@ import ProdutosAdm from './components/administrador/ProdutosAdm.vue';
 
 <template>
   <HeaderPadrao />
+  <div class="container">
   <RouterView />
+  </div>
   <LoginComponente/>
 </template>
 <style scoped>
-
+.container{
+  margin-top: 84px;
+}
 </style>

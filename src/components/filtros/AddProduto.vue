@@ -61,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div @click="openAddProduto = true" class="produto-button">
+  <div @click="$emit('open')" class="produto-button">
     <button>+</button>
     <span>Adicionar novo produto</span>
   </div>
@@ -168,15 +168,8 @@ onMounted(() => {
 }
 
 .produto-button {
-  margin-left: calc(15vw - 30px);
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  padding-right: 9vw;
-  margin-bottom: 20px;
   background-color: transparent;
   border: none;
-  justify-content: end;
 }
 
 .produto-button button {
@@ -190,7 +183,7 @@ onMounted(() => {
 }
 
 .produto-button span {
-  font-weight: 650;
+  font-weight: 600;
 }
 
 /* Estilo para inputs */
@@ -228,5 +221,9 @@ textarea {
 
 .button:hover {
   background-color: #f285fa;
+}
+span{
+   color: #191645;
+   font-size: 15px;
 }
 </style>
