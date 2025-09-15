@@ -148,7 +148,7 @@ h1 {
   top: 0;
   width: 100vw;
   height: 100vh;
-  position: absolute;
+  position: fixed;
   background-color: rgba(220, 220, 220, 0.72);
   z-index: 999999999999999;
   display: flex;
