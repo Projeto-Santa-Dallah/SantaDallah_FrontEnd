@@ -1,16 +1,23 @@
 <script setup>
 import ProdutoAdm from "./ProdutoAdm.vue";
-import { onMounted } from 'vue'
+import DescricaoProduto from './DescricaoProduto.vue'
+import { onMounted, ref } from 'vue'
 import { useProdutosStore } from '@/stores/produtos'
 
-
-
-
 const produtosStore = useProdutosStore()
+const DescricaoAberta = ref(false)
+const idSelecionado = ref(0)
 
+function openDescricao(id) {
+  DescricaoAberta.value = true
+  idSelecionado.value = id
+}
+function fecharDescricao(){
+  DescricaoAberta.value = false
+}
 
 onMounted(async () => {
- await produtosStore.carregarProdutos()
+  await produtosStore.carregarProdutos()
 })
 
 
@@ -66,38 +73,38 @@ onMounted(async () => {
 
 
 <template>
- <div class="produtos">
-  <slot></slot>
- <!-- {{ produtosStore.produtos.results }} -->
-  <div class="produto" v-for="produto in produtosStore.produtos" :key="produto.id">
-     <ProdutoAdm
-       :id="produto.id"
-       :nome="produto.nome"
-       :preco="produto.preco"
-       :foto="produto.foto_url"
-     />
-   </div>
- </div>
+  <!-- <h1>{{idSelecionado}}</h1> -->
+  <div v-if="DescricaoAberta == false" class="produtos">
+    <slot></slot>
+    <div class="produto" v-for="produto in produtosStore.produtos" :key="produto.id">
+      <!-- <h1>{{ produtosStore.produtos }}</h1> -->
+      <ProdutoAdm :id="produto.id" :nome="produto.nome" :preco="produto.preco" :foto="produto.foto_url"
+        @open="openDescricao" />
+    </div>
+  </div>
+  <div class="descricao" v-else>
+  <DescricaoProduto @fechar="fecharDescricao" :id="idSelecionado" />
+</div>
 </template>
 
 
 <style scoped>
-.produtos {
- display: flex;
- flex-direction: column;
- padding: 0px 7vw 0px 50px;
- width: 71vw;
- margin-bottom: 100px;
+.produtos, .descricao {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 7vw 0px 50px;
+  width: 71vw;
+  margin-bottom: 100px;
 }
 
 
 .produto {
- width: 100%;
- padding: 5px;
+  width: 100%;
+  padding: 5px;
 }
 
 
 .produtos.two-products {
- justify-content: flex-start;
+  justify-content: flex-start;
 }
 </style>

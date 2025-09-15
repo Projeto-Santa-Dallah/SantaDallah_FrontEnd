@@ -21,7 +21,7 @@ onMounted(() => {
 // })
 </script>
 <template>
-    <div class="tudo">
+    <div class="tudo" @click="$emit('open', id)">
         <div class="info-principal">
             <img class="img" :src="props.foto" />
             <div class="nome-container">
@@ -85,15 +85,14 @@ onMounted(() => {
     padding: 30px 30px;
     transition: .3s;
     border-bottom: 1px solid #d9d9d9;
+    cursor:pointer;
 }
 
 .tudo:hover {
     transform: translate3d(0, -3px, 0) scale(1.01);
     transition: .3s;
-    /* border: 1px solid #3f3b3b; */
-    box-shadow: 0 0 4px 1px #d9d9d9;
+    background: #fafafa;
 }
-
 .info-principal {
     display: flex;
     align-items: center;
