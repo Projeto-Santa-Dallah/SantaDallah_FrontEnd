@@ -1,104 +1,133 @@
 <script setup>
-import { ref, reactive, watch, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
+import { useProdutosStore } from "@/stores/produtos";
 import { useCategoriaStore } from "@/stores/categorias";
 import { useTamanhoStore } from "@/stores/tamanhos";
+
 defineProps({
   open: {
     type: Boolean,
     required: true,
   },
 });
+
+const useProdutos = useProdutosStore();
 const useCategorias = useCategoriaStore();
-const useTamanho = useTamanhoStore();
+const useTamanhos = useTamanhoStore();
+
 onMounted(() => {
+  useProdutos.carregarProdutos();
   useCategorias.getCategorias();
+  useTamanhos.getTamanhos();
 });
-const openAddTamanho = ref(Boolean(open));
+
 const confirmacao = ref(false);
-const categoriaSelecionada = ref();
-const tamanho = reactive({
-  id: null,
+
+const pedido = reactive({
   nome: "",
-  qtdFatia: null,
-  massakg: "",
-  formato: "",
-  categoria: "",
+  categoria: null,
+  descricao: "",
+  sabor: "",
+  tipo: "",
+  validade: "",
+  preco: null,
+  tamanho: null,
+  fotos: [], // array para armazenar imagens
 });
 
-watch(openAddTamanho, (novoValor) => {
-  if (!novoValor) {
-    Object.assign(tamanho, {
-      id: null,
-      nome: "",
-      qtdFatia: null,
-      massakg: "",
-      formato: "",
-      categoria: null,
-    });
-  }
-});
-
-async function adicionarTamanho() {
-  try {
-    tamanho.categoria = categoriaSelecionada.value;
-    await useTamanho.salvarTamanho({ ...tamanho }); // chama o store
-    confirmacao.value = true;
-  } catch {
-    console.log("Erro ao salvar tamanho:");
-  }
+function handleFileChange(event) {
+  pedido.fotos = Array.from(event.target.files);
 }
 
-onMounted(() => {
-  useTamanho.getTamanhos();
-});
+async function salvarPedido() {
+  try {
+    console.log("Pedido salvo:", pedido);
+    // Aqui você chamaria seu store ou API para salvar o pedido
+    confirmacao.value = true;
+  } catch (e) {
+    console.error("Erro ao salvar pedido", e);
+  }
+}
 </script>
 
 <template>
-  <div class="container-add-produto" v-if="openAddTamanho">
+  <div class="container-add-produto" v-if="open">
     <div class="tamanhos-header">
       <div class="header">
-        <h1 class="titulo-tamanhos">Cadastrar Tamanho</h1>
+        <h1 class="titulo-tamanhos">Cadastrar Pedido</h1>
       </div>
     </div>
-    <div class="container">
-      <form @submit.prevent="adicionarTamanho">
-        <label for="nome">Nome:</label>
-        <input v-model="tamanho.nome" id="nome" type="text" required placeholder="Nome" />
 
+    <div class="container">
+      <form @submit.prevent="salvarPedido">
+        <!-- Nome -->
+        <label for="nome">Nome:</label>
+        <input v-model="pedido.nome" id="nome" type="text" required placeholder="Nome" />
+
+        <!-- Categoria -->
         <label for="categoria">Categoria:</label>
-        <select v-model="categoriaSelecionada" required>
-          <option disabled value="" selected>Escolha uma opção</option>
-          <option v-for="categoria in useCategorias.categorias" :key="categoria.value" :value="categoria.id">
-            {{ categoria.nome }}
+        <select v-model="pedido.categoria" id="categoria" required>
+          <option disabled value="">Escolha uma categoria</option>
+          <option v-for="cat in useCategorias.categorias" :key="cat.id" :value="cat.id">
+            {{ cat.nome }}
           </option>
         </select>
+
+        <!-- Descrição -->
+        <label for="descricao">Descreva o produto:</label>
+        <textarea v-model="pedido.descricao" id="descricao" placeholder="Descrição do produto" required></textarea>
+
+        <!-- Sabor -->
+        <label for="sabor">Sabor:</label>
+        <input v-model="pedido.sabor" id="sabor" type="text" placeholder="Sabor" required />
+
+        <!-- Tipo -->
+        <label for="tipo">Tipo:</label>
+        <input v-model="pedido.tipo" id="tipo" type="text" placeholder="Tipo" required />
+
         <div class="fatia-kg-formato">
+          <!-- Validade -->
           <div class="container-cadastro">
-            <label for="qtdFatia">Qtd de Fatias:</label>
-            <input v-model="tamanho.qtdFatia" id="qtdFatia" type="number" required placeholder="Qtd de Fatias" />
+            <label for="validade">Validade:</label>
+            <input v-model="pedido.validade" id="validade" type="date" required />
           </div>
           <div class="container-cadastro">
-            <label for="massa">Massa (kg):</label>
-            <input v-model="tamanho.massakg" id="massa" type="text" required placeholder="Massa (kg)" />
-          </div>
+            <!-- Preço -->
+            <label for="preco">Preço:</label>
+            <input v-model.number="pedido.preco" id="preco" type="number" step="0.01" min="0" placeholder="Preço"
+              required />
+          </div> 
           <div class="container-cadastro">
-            <label for="formato">Formato:</label>
-            <input v-model="tamanho.formato" id="formato" type="text" required placeholder="Formato" />
+            <!-- Tamanho -->
+            <label for="tamanho">Tamanho:</label>
+            <select v-model="pedido.tamanho" id="tamanho" required>
+              <option disabled value="">Escolha um tamanho</option>
+              <option v-for="tam in useTamanhos.tamanhos" :key="tam.id" :value="tam.id">
+                {{ tam.nome }}
+              </option>
+            </select>
           </div>
         </div>
+
+        <!-- Fotos -->
+        <label for="fotos">Fotos:</label>
+        <input id="fotos" type="file" multiple @change="handleFileChange" accept="image/*" />
+
+        <!-- Botões -->
         <div class="buttons-container">
           <button class="button-cancelar" @click="$emit('close')">Cancelar</button>
-          <button class="button" type="submit">Adicionar Tamanho</button>
+          <button class="button" type="submit">Adicionar Pedido</button>
         </div>
       </form>
     </div>
   </div>
+
   <div v-if="confirmacao" class="confirmacao">
     <div class="container">
       <div class="div-fechar">
         <button class="fechar" @click="$emit('close')">x</button>
       </div>
-      <span>Tamanho cadastrado com sucesso!</span><svg width="34" height="32" viewBox="0 0 34 32" fill="none"
+      <span>Pedido cadastrado com sucesso!</span><svg width="34" height="32" viewBox="0 0 34 32" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path
           d="M11 14.3333L16 19.3333L32.6667 2.66667M22.6667 1H9C6.19974 1 4.79961 1 3.73005 1.54497C2.78924 2.02433 2.02433 2.78924 1.54497 3.73005C1 4.79961 1 6.19974 1 9V23C1 25.8003 1 27.2004 1.54497 28.27C2.02433 29.2108 2.78924 29.9757 3.73005 30.455C4.79961 31 6.19974 31 9 31H23C25.8003 31 27.2004 31 28.27 30.455C29.2108 29.9757 29.9757 29.2108 30.455 28.27C31 27.2004 31 25.8003 31 23V16"

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // CLIENTE
     {
       path: '/',
       name: 'Home',
@@ -43,6 +44,8 @@ const router = createRouter({
       name: 'Carrinho',
       component: () => import('../views/cliente/CarrinhoView.vue')
     },
+
+    // ADMIN
     {
       path: '/homeAdmin',
       name: 'Home Admin',
@@ -55,13 +58,18 @@ const router = createRouter({
     },
     {
       path: '/orcamentoAdmin',
-      name: 'Orçamento Admin',
+      name: 'Orçamentos Admin',
       component: () => import('../views/administrador/OrcamentoView.vue')
     },
     {
       path: '/pedidosAdmin',
       name: 'Pedidos Admin',
       component: () => import('../views/administrador/PedidosView.vue')
+    },
+    {
+      path: '/clientesAdmin',
+      name: 'Clientes Admin',
+      component: () => import('../views/administrador/ClientesView.vue')
     },
     {
       path: '/perfilAdmin',

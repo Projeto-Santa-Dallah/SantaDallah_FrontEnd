@@ -17,7 +17,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="tudo">
+  <div class="tudo" @click="$emit('open', id)">
     <div class="info-principal">
       <div class="nome-container">
         <span class="nome">{{ nome }} ({{ qtdFatia }} Fatias)</span>
@@ -81,9 +81,9 @@ onMounted(() => {
   border-bottom: 1px solid #d9d9d9;
 }
 .tudo:hover {
-  transform: translate3d(0, -3px, 0) scale(1.01);
-  transition: 0.3s;
-  box-shadow: 0 0 4px 1px #d9d9d9;
+    transform: translate3d(0, -3px, 0) scale(1.01);
+    transition: .3s;
+    background: #fafafa;
 }
 .info-principal {
   display: flex;

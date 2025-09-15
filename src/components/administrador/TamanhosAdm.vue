@@ -1,8 +1,19 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import TamanhoAdm from './TamanhoAdm.vue'
 import { useTamanhoStore } from '@/stores/tamanhos';
+import DescricaoTamanho from '@/components/administrador/DescricaoTamanho.vue'
 const tamanhoStore = useTamanhoStore();
+const DescricaoAberta = ref(false)
+const idSelecionado = ref(0)
+
+function openDescricao(id) {
+  DescricaoAberta.value = true
+  idSelecionado.value = id
+}
+function fecharDescricao(){
+  DescricaoAberta.value = false
+}
 onMounted(() => {
   tamanhoStore.getTamanhos();
 });
@@ -36,7 +47,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="tamanhos">
+  <!-- <h1>{{idSelecionado}}</h1> -->
+  <div v-if="DescricaoAberta == false" class="tamanhos">
     <slot></slot>
     <div class="tamanho" v-for="tamanho in tamanhoStore.tamanhos" :key="tamanho.id">
       <TamanhoAdm
@@ -46,13 +58,17 @@ onMounted(() => {
         :massakg="tamanho.massakg"
         :formato="tamanho.formato"
         :categoria="tamanho.categoria"
+        @open="openDescricao" 
       />
     </div>
   </div>
+    <div class="descricao" v-else>
+  <DescricaoTamanho @fechar="fecharDescricao" :id="idSelecionado" />
+</div>
 </template>
 
 <style scoped>
-.tamanhos {
+.tamanhos, .descricao {
   display: flex;
   flex-direction: column;
   padding: 0px 7vw 0px 50px;
