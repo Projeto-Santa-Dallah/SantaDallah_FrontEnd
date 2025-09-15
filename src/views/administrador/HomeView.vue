@@ -4,13 +4,23 @@ import SaboresFavoritos from '@/components/administrador/grafico/SaboresFavorito
 import { ref } from 'vue';
 
 const selectedColor = ref('purple');
+// pega a data de hoje
+const today = new Date()
+
+// controla a data selecionada no calendário
+const selectedDate = ref(today)
+
+
 const attrs = ref([
   {
-    key: 'test',
-    highlight: true,
-    dates: { start: new Date(2019, 3, 15), end: new Date(2019, 3, 19) },
+    key: 'today',
+    highlight: {
+      color: 'purple',
+      fillMode: 'solid'
+    },
+    dates: today // aqui marca o dia de hoje
   }
-]);
+])
 </script>
 <template>
     <div class="conteiner">
@@ -51,9 +61,11 @@ const attrs = ref([
   
   <div class="container-direita">
     <div class="calendario">
-      <VCalendar borderless
-    :initial-page="{ month: 4, year: 2019 }"
-    :color="selectedColor"
+  <VCalendar
+    v-model="selectedDate"
+    borderless
+    :initial-page="{ month: today.getMonth() + 1, year: today.getFullYear() }"
+    :color="'purple'"
     :attributes="attrs"
   />
     </div>
