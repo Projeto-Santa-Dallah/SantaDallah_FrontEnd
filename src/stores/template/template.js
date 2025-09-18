@@ -1,7 +1,19 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router';
 
 export const useTemplateStore = defineStore('template', () => {
+  const authStore = useAuthStore()
+const router = useRouter();
+  // isAdmin reativo
+  const isAdmin = computed(() => authStore.loggedIn && authStore.user?.is_superuser)
+
+  // if(isAdmin.value){
+  //   router.push('/homeAdmin')
+  // }
+
+  // Menus padrão e admin
   const titles = [
     { text: 'Home', link: '/' },
     { text: 'Doces', link: '/produtos' },
@@ -16,12 +28,10 @@ export const useTemplateStore = defineStore('template', () => {
     { text: 'Tamanhos', link: '/tamanhosAdmin' },
     { text: 'Categorias', link: '/categoriasAdmin' },
     { text: 'Pedidos', link: '/pedidosAdmin' },
-    { text: 'Orçamentos', link: '/orcamentoAdmin' },    
+    { text: 'Orçamentos', link: '/orcamentoAdmin' },
     { text: 'Clientes', link: '/clientesAdmin' },
     { text: 'Perfil', link: '/perfilAdmin' }
   ]
-
-  const isAdmin = ref(false)
 
   return { titles, adminTitles, isAdmin }
 })

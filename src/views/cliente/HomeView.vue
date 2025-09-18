@@ -1,5 +1,63 @@
+<script setup>
+import { PassageUser } from '@passageidentity/passage-elements/passage-user'
+import {ref, onMounted, watch} from 'vue'
+import { useAuth } from '@/composables/auth'
+import axios from 'axios'
+
+import { useTemplateStore } from '@/stores/template/template';
+import { useRouter } from 'vue-router';
+
+const templateStore = useTemplateStore();
+const router = useRouter();
+const carregando = ref(false)
+const pararCarregamento = () => {
+  setTimeout(() => {
+    carregando.value = false
+  }, 10000) 
+}
+
+
+// import { PassageUser } from '@passageidentity/passage-elements/passage-user';
+const user = ref()
+// const carregando = ref(false)
+const getUserData = async () => {
+  try {
+    carregando.value = true
+    const response = await axios.get('/usuarios/me')
+    user.value = response.data
+    pararCarregamento()
+  } catch (error) {
+    console.error('Erro ao buscar dados do usuário:', error)
+  }
+}
+
+watch(
+  () => templateStore.isAdmin,
+  (isAdmin) => {
+    if (isAdmin === null || isAdmin === undefined) return; // ainda não tem valor
+
+    if (isAdmin) router.replace('/homeAdmin');
+    else router.replace('/');
+  },
+  { immediate: true } // roda imediatamente se já tiver valor
+);
+
+
+// Propriedade computada para os produtos
+
+useAuth()
+onMounted(() => {
+  getUserData()
+})
+</script>
+
+
+
 <template>
-  <div class="container-home">
+  <div v-if="carregando && templateStore.isAdmin" class="loading">
+  <img src="/src/assets/loading.gif" alt="">
+  </div>
+  <div class="container-home" v-else>
     <!-- Fundo com GIF -->
     <div class="fundo"></div>
 
@@ -39,6 +97,21 @@
 </template>
 
 <style scoped>
+
+.loading{
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.loading img{
+  width: 5%;
+
+}
 .container-home {
   width: 100%;
   height: 100%;

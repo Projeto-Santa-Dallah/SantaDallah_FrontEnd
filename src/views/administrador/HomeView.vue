@@ -1,7 +1,7 @@
 <script setup>
 import OrcamentoProduto from '@/components/administrador/grafico/OrcamentoProduto.vue'
 import SaboresFavoritos from '@/components/administrador/grafico/SaboresFavoritos.vue'
-import { ref } from 'vue';
+import { ref, onMounted, watch} from 'vue';
 
 const selectedColor = ref('purple');
 // pega a data de hoje
