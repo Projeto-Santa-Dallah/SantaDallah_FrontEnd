@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTemplateStore } from '@/stores/template/template'
 
+
 const TemplateStore = useTemplateStore()
 const router = useRouter()
 const login = ref(false)

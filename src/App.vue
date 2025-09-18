@@ -10,7 +10,7 @@ import ProdutosAdm from './components/administrador/ProdutosAdm.vue';
   <div class="container">
   <RouterView />
   </div>
-  <LoginComponente/>
+  <!-- <LoginComponente/> -->
 </template>
 <style scoped>
 .container{
