@@ -2,82 +2,83 @@
 import { ref, reactive, watch, onMounted } from "vue";
 import { useCategoriaStore } from "@/stores/categorias";
 
-defineProps({
-    open: {
-        type: Boolean,
-        required: true,
-    },
+const props = defineProps({
+  open: { type: Boolean, required: true },
+  idEditar: { type: Number, default: null }
 });
-const CategoriaStore = useCategoriaStore()
-const openAddCategoria = ref(Boolean(open));
+const emit = defineEmits(["close"]);
+
+const CategoriaStore = useCategoriaStore();
+const openAddCategoria = ref(props.open);
 const confirmacao = ref(false);
 
 const Categoria = reactive({
-    id: null,
-    nome: "",
-    descricao: "",
+  id: null,
+  nome: "",
+  descricao: "",
 });
 
-watch(openAddCategoria, (novoValor) => {
-    if (!novoValor) {
-        Object.assign(Categoria, {
-            id: null,
-            nome: "",
-            descricao: "",
-        });
-    }
+// Carregar categoria existente se for edição
+onMounted(async () => {
+  await CategoriaStore.getCategorias();
+
+  if (props.idEditar) {
+    const existente = CategoriaStore.categorias.find(c => c.id === props.idEditar);
+    if (existente) Object.assign(Categoria, existente);
+  }
 });
 
-async function adicionarCategoria() {
-    try {
-        await CategoriaStore.salvarCategoria({ ...Categoria }); // chama o store
-        confirmacao.value = true;
-    } catch {
-        console.log("Erro ao salvar categoria:");
-    }
+watch(() => props.open, (novo) => {
+  openAddCategoria.value = novo;
+  if (!novo && !props.idEditar) {
+    Object.assign(Categoria, { id: null, nome: "", descricao: "" });
+  }
+});
+
+async function salvar() {
+  try {
+    await CategoriaStore.salvarCategoria({ ...Categoria });
+    confirmacao.value = true;
+    await CategoriaStore.getCategorias();
+  } catch {
+    console.log("Erro ao salvar categoria");
+  }
 }
-
-
-onMounted(() => {
-    CategoriaStore.getCategorias();
-});
-
 </script>
 
 <template>
-    <div class="container-add-produto" v-if="openAddCategoria">
-        <div class="tamanhos-header">
-            <div class="header">
-                <h1 class="titulo-tamanhos">Cadastrar Categoria</h1>
-            </div>
-        </div>
-        <div class="container">
-            <form @submit.prevent="adicionarCategoria">
-                <label for="nome">Nome:</label>
-                <input v-model="Categoria.nome" id="nome" type="text" required placeholder="Nome" />
-                <label for="descricao">Descrição:</label>
-                <input v-model="Categoria.descricao" id="descricao" type="text" required placeholder="Descrição" />
+  <div class="container-add-produto" v-if="openAddCategoria">
+    <div class="tamanhos-header">
+      <div class="header">
+        <h1 class="titulo-tamanhos">{{ props.idEditar ? 'Editar Categoria' : 'Cadastrar Categoria' }}</h1>
+      </div>
+    </div>
+    <div class="container">
+      <form @submit.prevent="salvar">
+        <label for="nome">Nome:</label>
+        <input v-model="Categoria.nome" id="nome" type="text" required placeholder="Nome" />
+        <label for="descricao">Descrição:</label>
+        <input v-model="Categoria.descricao" id="descricao" type="text" required placeholder="Descrição" />
 
-                <div class="buttons-container">
-                    <button class="button-cancelar" @click="$emit('close')">Cancelar</button>
-                    <button class="button" type="submit">Adicionar Categoria</button>
-                </div>
-            </form>
+        <div class="buttons-container">
+          <button class="button-cancelar" @click.prevent="$emit('close')">Cancelar</button>
+          <button class="button" type="submit">{{ props.idEditar ? 'Salvar Alterações' : 'Adicionar Categoria' }}</button>
         </div>
+      </form>
     </div>
-    <div v-if="confirmacao" class="confirmacao">
-        <div class="container">
-            <div class="div-fechar">
-                <button class="fechar" @click="$emit('close')">x</button>
-            </div>
-            <span>Categoria cadastrado com sucesso!</span><svg width="34" height="32" viewBox="0 0 34 32" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M11 14.3333L16 19.3333L32.6667 2.66667M22.6667 1H9C6.19974 1 4.79961 1 3.73005 1.54497C2.78924 2.02433 2.02433 2.78924 1.54497 3.73005C1 4.79961 1 6.19974 1 9V23C1 25.8003 1 27.2004 1.54497 28.27C2.02433 29.2108 2.78924 29.9757 3.73005 30.455C4.79961 31 6.19974 31 9 31H23C25.8003 31 27.2004 31 28.27 30.455C29.2108 29.9757 29.9757 29.2108 30.455 28.27C31 27.2004 31 25.8003 31 23V16"
-                    stroke="#AFE67E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        </div>
+  </div>
+
+  <div v-if="confirmacao" class="confirmacao">
+    <div class="container">
+      <div class="div-fechar">
+        <button class="fechar" @click="$emit('close')">x</button>
+      </div>
+      <span>Categoria {{ props.idEditar ? 'atualizada' : 'cadastrada' }} com sucesso!</span>
+      <svg width="34" height="32" viewBox="0 0 34 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M11 14.3333L16 19.3333L32.6667 2.66667M22.6667 1H9C6.19974 1 4.79961 1 3.73005 1.54497C2.78924 2.02433 2.02433 2.78924 1.54497 3.73005C1 4.79961 1 6.19974 1 9V23C1 25.8003 1 27.2004 1.54497 28.27C2.02433 29.2108 2.78924 29.9757 3.73005 30.455C4.79961 31 6.19974 31 9 31H23C25.8003 31 27.2004 31 28.27 30.455C29.2108 29.9757 29.9757 29.2108 30.455 28.27C31 27.2004 31 25.8003 31 23V16" stroke="#AFE67E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+     </svg>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -85,7 +86,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     padding: 0px 7vw 0px 50px;
-    width: 71vw;
+    width: 60vw;
     margin-bottom: 100px;
 }
 
@@ -126,6 +127,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    left: 0;
 }
 
 .confirmacao .container {
