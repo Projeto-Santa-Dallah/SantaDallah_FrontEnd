@@ -4,8 +4,9 @@ import AdminFiltro from '@/components/filtros/AdminFiltro.vue';
 import AddProduto from '@/components/filtros/AddProduto.vue';
 import ProdutosAdm from '@/components/administrador/ProdutosAdm.vue';
 import CadastrarProduto from '@/components/filtros/CadastrarProduto.vue'
-
+import { useProdutosStore } from '@/stores/produtos'
 const openAddProduto = ref(false);
+const ProdutosStore = useProdutosStore()
 
 function openProduto() {
   openAddProduto.value = true;
@@ -25,7 +26,7 @@ function closeProduto() {
         <ProdutosAdm v-else>
             <div class="produtos-header">
                 <div class="header">
-                    <h1 class="titulo-produtos">Produtos</h1><span> (58 encontrados)</span>
+                    <h1 class="titulo-produtos">Produtos</h1><span> ({{ ProdutosStore.produtos.length }} encontrados)</span>
                 </div>
             </div>
         </ProdutosAdm>
