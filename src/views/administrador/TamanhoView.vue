@@ -1,10 +1,13 @@
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import AdminFiltro from "@/components/filtros/AdminFiltro.vue";
 import AddTamanho from "@/components/filtros/AddTamanho.vue";
 import TamanhosAdm from "@/components/administrador/TamanhosAdm.vue";
 import CadastrarTamanho from '@/components/filtros/CadastrarTamanho.vue'
+import { useTamanhoStore } from '@/stores/tamanhos'
+
 const openAddTamanho = ref(false);
+const tamanhoStore = useTamanhoStore();
 
 function openTamanho() {
   openAddTamanho.value = true;
@@ -16,18 +19,23 @@ function closeTamanho() {
 
 <template>
   <div class="filtro-tamanhos">
-    <AdminFiltro> <AddTamanho @open="openTamanho()" /></AdminFiltro>
+    <AdminFiltro> 
+      <AddTamanho @open="openTamanho()" />
+    </AdminFiltro>
+
     <CadastrarTamanho :open="openAddTamanho" @close="closeTamanho()" v-if="openAddTamanho"/>
+
     <TamanhosAdm v-else>
       <div class="tamanhos-header">
         <div class="header">
           <h1 class="titulo-tamanhos">Tamanhos</h1>
-          <span> (58 encontrados)</span>
+          <span>({{ tamanhoStore.tamanhos.length }} encontrados)</span>
         </div>
       </div>
     </TamanhosAdm>
   </div>
 </template>
+
 <style scoped>
 span {
   color: #bf99c8;
