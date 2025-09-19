@@ -15,6 +15,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
 // Use plugin defaults (optional)
 app.use(setupCalendar, {})
 
