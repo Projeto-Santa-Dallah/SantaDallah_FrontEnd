@@ -16,7 +16,11 @@ const usuario = ref({
   email: '',
   senha: '',
   senhaConfirmacao: '',
-  foto: ''
+  foto: '',
+  is_active: '',
+  is_staff:'',
+  is_superuser: '',
+  last_login: ''
 })
 
 function caminho(opcao) {
@@ -55,7 +59,7 @@ function deslogar(tempo = 1000) {
   setTimeout(() => {
     useAuth.unsetToken()
     localStorage.removeItem('psg_auth_token')
-    router.push({ name: 'home' })
+    router.push('/')
   }, tempo)
 }
 onMounted(async () => {

@@ -55,4 +55,9 @@ span {
   display: flex;
   align-items: center;
 }
+h1 {
+  margin-right: 10px;
+  color: #191645;
+  font-size: 24px;
+}
 </style>

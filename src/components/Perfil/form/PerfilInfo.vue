@@ -2,13 +2,20 @@
 import { onMounted, ref , watch} from 'vue';
 import buttonPerfil from '../button/buttonPerfil.vue';
 const props = defineProps(['DadosUser'])
-const usuario = ref({
-    name: "",
-    email: "",
-    // telefone: '',
-    senha: "",
-    senhaConfirmacao: "",
-  });
+const usuario = ref({});
+
+const formatDate = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }); formatDate(usuario.last_login) || 'Nunca logado' 
+};
 
   watch(() => props.DadosUser, (newVal) => {
   if (newVal) usuario.value = { ...newVal }
@@ -19,6 +26,8 @@ const usuario = ref({
     console.log(usuario.value)
   })
 
+  const camposVisiveis = ['name', 'email', 'is_active', 'is_staff', 'is_superuser', 'last_login']
+
 </script>
 
 <template>
@@ -26,28 +35,13 @@ const usuario = ref({
         <div><h1>Meus Dados</h1></div>
 
         <div class="inputs" v-if="usuario">
-          <div class="input-div">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" class="" v-model="usuario.name" />
+          <div class="input-div"  v-for="chave in camposVisiveis" :key="chave" >
+            <label for="nome">{{ chave }}</label>
+            <input v-if="chave !='last_login'" type="text" id="nome" class="" v-model="usuario[chave]" />
+            <input v-else type="text" id="nome" class="" :value="formatDate(usuario.last_login) || 'Nunca logado'" disabled/>
+          
           </div>
-          <div class="input-div">
-            <label for="email">Email:</label>
-            <input type="text" id="email" v-model="usuario.email" />
-          </div>
-         
-          <!-- <div class="input-div">
-            <label for="wahtsapp">Número:</label>
-            <input type="text" id="whatsapp" v-model="usuario.telefone.numero" />
-          </div> -->
-          <div class="input-div">
-            <label for="alterarsenha">Alterar Senha:</label>
-            <input type="password" id="alterarsenha" v-model="usuario.senha" placeholder="Insira uma nova senha" />
-            
-          </div>
-          <div class="input-div">
-            <label for="confirmarsenha">Confirme Senha:</label>
-            <input type="password" id="confirmarsenha" v-model="usuario.senhaConfirmacao" placeholder="Confirme sua nova senha"/>
-          </div>
+       
         </div>
        <buttonPerfil @click="$emit('enviarDados', usuario)" titulo="Salvar Alterações"/>
     </div>
