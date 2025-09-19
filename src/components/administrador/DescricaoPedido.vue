@@ -75,11 +75,29 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-span { font-size: 16px; }
-.titulo-info { font-weight: 600; }
-.container-info, .descricao { padding-top: 20px; padding-right: 20px; }
-.container-info { display: flex; flex-wrap: wrap; }
-.info-container { width: 33%; }
+span {
+  font-size: 16px;
+}
+
+.titulo-info {
+  font-weight: 600;
+}
+
+.container-info,
+.descricao {
+  padding-top: 20px;
+  padding-right: 20px;
+}
+
+.container-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.info-container {
+  width: 33%;
+}
+
 .voltar {
   cursor: pointer;
   border: 1px solid rgb(209, 209, 209);
@@ -88,10 +106,35 @@ span { font-size: 16px; }
   padding: 5px 10px;
   border-radius: 20%;
 }
-.voltar:hover { background-color: #cfadcf; }
-h1 { margin-right: 10px; color: #191645; font-size: 24px; }
-.header { width: 100%; display: flex; align-items: center; justify-content: space-between; }
-.titulo-pedido { font-size: 24px; font-weight: 600; }
-ul { list-style: none; padding: 0; }
-li { padding: 5px 0; }
+
+.voltar:hover {
+  background-color: #cfadcf;
+}
+
+h1 {
+  margin-right: 10px;
+  color: #191645;
+  font-size: 24px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titulo-pedido {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 5px 0;
+}
 </style>
