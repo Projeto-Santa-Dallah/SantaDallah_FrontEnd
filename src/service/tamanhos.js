@@ -1,7 +1,7 @@
 import axios from "axios";
 export default class TamanhoApi {
- async buscarTodasOsTamanhos() {
-   const { data } = await axios.get(`/tamanhos/`);
+ async buscarTodasOsTamanhos(params = {}) {
+   const { data } = await axios.get(`/tamanhos/`, { params });
    return data;
  }
  async adicionarTamanho(tamanho) {
@@ -10,7 +10,11 @@ export default class TamanhoApi {
  }
  async atualizarTamanho(tamanho) {
    const { data } = await axios.put(`/tamanhos/${tamanho.id}/`, tamanho);
-   return data.results;
+   return data;
+ }
+  async buscarPorId(id) {
+    const { data } = await axios.get(`/tamanhos/${id}`);
+   return data;
  }
  async excluirTamanho(id) {
    await axios.delete(`/tamanhos/${id}/`);
