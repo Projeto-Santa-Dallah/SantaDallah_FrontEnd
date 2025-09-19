@@ -1,42 +1,60 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from 'vue'
+import { useOrcamentosStore } from '@/stores/orcamentos'
 
-defineProps({
-  open: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps({
+  open: { type: Boolean, required: true }
+})
+const emit = defineEmits(['close'])
 
-const confirmacao = ref(false);
+const orcamentosStore = useOrcamentosStore()
+const confirmacao = ref(false)
 
 const orcamento = reactive({
-  usuario: "",
-  data: "",
+  usuario: '',
+  data: '',
   qtnPessoas: 0,
-  local: "",
+  local: '',
   bebidaAlcoolica: false,
   docinhos: false,
-  fotos: [],
-});
+  fotos: []
+})
 
 function handleFileChange(event) {
-  orcamento.fotos = Array.from(event.target.files);
+  orcamento.fotos = Array.from(event.target.files)
 }
 
 async function salvarOrcamento() {
   try {
-    console.log("Orçamento salvo:", orcamento);
-    // Aqui você chamaria seu store ou API para salvar o orçamento
-    confirmacao.value = true;
+    await orcamentosStore.salvarOrcamento(orcamento)
+    confirmacao.value = true
+    resetarFormulario()
   } catch (e) {
-    console.error("Erro ao salvar orçamento", e);
+    console.error('Erro ao salvar orçamento', e)
   }
 }
+
+function resetarFormulario() {
+  orcamento.usuario = ''
+  orcamento.data = ''
+  orcamento.qtnPessoas = 0
+  orcamento.local = ''
+  orcamento.bebidaAlcoolica = false
+  orcamento.docinhos = false
+  orcamento.fotos = []
+}
+
+watch(() => props.open, (novo) => {
+  if (!novo) {
+    confirmacao.value = false
+    resetarFormulario()
+  }
+})
+
 </script>
 
 <template>
-  <div class="container-add-orcamento" v-if="open">
+  <div class="container-add-orcamento" v-if="props.open">
     <div class="orcamentos-header">
       <div class="header">
         <h1 class="titulo-orcamentos">Cadastrar Orçamento</h1>
@@ -55,11 +73,11 @@ async function salvarOrcamento() {
 
         <!-- Quantidade de Pessoas -->
         <label for="qtnPessoas">Quantidade de Pessoas:</label>
-        <input v-model.number="orcamento.qtnPessoas" id="qtnPessoas" type="number" min="0" required />
+        <input v-model.number="orcamento.qtnPessoas" id="qtnPessoas" type="number" min="1" required />
 
         <!-- Local -->
         <label for="local">Local:</label>
-        <input v-model="orcamento.local" id="local" type="text" maxlength="10" placeholder="Local" />
+        <input v-model="orcamento.local" id="local" type="text" maxlength="50" placeholder="Local do evento" />
 
         <!-- Bebida Alcoólica -->
         <label>
@@ -85,6 +103,7 @@ async function salvarOrcamento() {
       </form>
     </div>
 
+    <!-- Confirmação -->
     <div v-if="confirmacao" class="confirmacao">
       <div class="container">
         <div class="div-fechar">
@@ -100,6 +119,7 @@ async function salvarOrcamento() {
 </template>
 
 <style scoped>
+/* Mesmos estilos do formulário de pedidos, ajustados para orçamento */
 .container-add-orcamento {
   display: flex;
   flex-direction: column;
