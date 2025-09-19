@@ -1,7 +1,12 @@
+<script setup>
+// import AsidePerfil from '@/components/Perfil/AsidePerfil/AsidePerfil.vue';
+// import PerfilInfo from '@/components/Perfil/form/PerfilInfo.vue';
+import PadraoPerfil from '@/components/Perfil/PadraoPerfil.vue';
+</script>
+
+
 <template>
-    <section>
-        <img src="/src/assets/imagens/emProgresso.jpg" alt="">
-    </section>
+  <padrao-perfil/>
 </template>
 
 <style scoped>

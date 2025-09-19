@@ -82,6 +82,7 @@ h1 {
   display: flex;
   align-items: center;
 }
+
 .titulo-orcamentos {
   font-size: 24px;
   font-weight: 600;
