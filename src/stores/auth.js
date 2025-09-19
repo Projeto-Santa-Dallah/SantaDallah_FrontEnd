@@ -7,6 +7,7 @@ const authService = new AuthService();
 export const useAuthStore = defineStore('auth', () => {
   const user = ref({});
   const loggedIn = ref(false);
+  const authToken = localStorage.getItem('psg_auth_token');
 
   async function setToken(token) {
     user.value = await authService.postUserToken(token);
@@ -18,6 +19,18 @@ export const useAuthStore = defineStore('auth', () => {
     loggedIn.value = false;
   
   }
+
+  async function updateUser(newUserData) {
+    if(authToken){
+      console.log('foiii')
+    }
+    console.log('foiii')
+    const updatedUserData = await authService.updateUserData(user.value.id,newUserData,authToken);
+    if (updatedUserData) {
+      user.value = updatedUserData; // Atualiza o estado com os dados novos
+ 
+    }
+  }
   console.log(user)
-  return { user, loggedIn, setToken, unsetToken };
+  return { user, loggedIn, setToken, unsetToken,updateUser };
 });
