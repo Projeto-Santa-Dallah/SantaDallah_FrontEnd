@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AdminFiltro from "@/components/filtros/AdminFiltro.vue"
 import AddOrcamento from "@/components/filtros/AddOrcamento.vue"
 import OrcamentosAdm from "@/components/administrador/OrcamentosAdm.vue"
 import CadastrarOrcamento from '@/components/filtros/CadastrarOrcamento.vue'
+import { useOrcamentosStore } from '@/stores/orcamentos' // a store que você vai criar
 
 const openAddOrcamento = ref(false)
+const orcamentosStore = useOrcamentosStore()
 
 function openOrcamento() {
   openAddOrcamento.value = true
@@ -13,6 +15,11 @@ function openOrcamento() {
 function closeOrcamento() {
   openAddOrcamento.value = false
 }
+
+onMounted(async () => {
+  await orcamentosStore.carregarOrcamentos()
+  console.log(orcamentosStore.orcamentos) // agora vai mostrar os dados
+})
 </script>
 
 <template>
@@ -20,12 +27,14 @@ function closeOrcamento() {
     <AdminFiltro>
       <AddOrcamento @open="openOrcamento()" />
     </AdminFiltro>
+
     <CadastrarOrcamento :open="openAddOrcamento" @close="closeOrcamento()" v-if="openAddOrcamento"/>
+
     <OrcamentosAdm v-else>
       <div class="orcamentos-header">
         <div class="header">
           <h1 class="titulo-orcamentos">Orçamentos</h1>
-          <span>(5 encontrados)</span>
+          <span>({{ orcamentosStore.orcamentos.length }} encontrados)</span>
         </div>
       </div>
     </OrcamentosAdm>

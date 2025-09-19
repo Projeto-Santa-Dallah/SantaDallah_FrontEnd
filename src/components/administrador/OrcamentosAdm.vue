@@ -1,34 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useOrcamentosStore } from '@/stores/orcamentos'
 import OrcamentoAdm from './OrcamentoAdm.vue'
 import DescricaoOrcamento from './DescricaoOrcamento.vue'
+import PaginacaoAdm from './PaginacaoAdm.vue'
 
+const orcamentosStore = useOrcamentosStore()
 const descricaoAberta = ref(false)
 const idSelecionado = ref(0)
-
-// Dados mockados para orçamentos
-const orcamentos = [
-  {
-    id: 1,
-    usuario: { id: 7, nome: "Isabelli Luísa", email: "isa@example.com" },
-    data: "2025-10-10",
-    qtnPessoas: 20,
-    local: "Buffet",
-    bebidaAlcoolica: true,
-    docinhos: false,
-    foto: [],
-  },
-  {
-    id: 2,
-    usuario: { id: 8, nome: "João Pedro", email: "joao@example.com" },
-    data: "2025-11-05",
-    qtnPessoas: 10,
-    local: "Casa",
-    bebidaAlcoolica: false,
-    docinhos: true,
-    foto: [],
-  }
-]
 
 function openDescricao(id) {
   descricaoAberta.value = true
@@ -37,6 +16,10 @@ function openDescricao(id) {
 function fecharDescricao() {
   descricaoAberta.value = false
 }
+
+onMounted(async () => {
+  await orcamentosStore.carregarOrcamentos() // chama a store que pega do backend
+})
 </script>
 
 <template>
@@ -44,24 +27,33 @@ function fecharDescricao() {
     <div class="orcamentos-header">
       <div class="header">
         <h1 class="titulo-orcamentos">Orçamentos</h1>
-        <span>({{ orcamentos.length }} encontrados)</span>
+        <span>({{ orcamentosStore.orcamentos.length }} encontrados)</span>
       </div>
     </div>
-    <div class="orcamento" v-for="orcamento in orcamentos" :key="orcamento.id">
+
+    <div class="orcamento" v-for="orcamento in orcamentosStore.orcamentos" :key="orcamento.id">
       <OrcamentoAdm
         :id="orcamento.id"
-        :cliente="orcamento.usuario.nome"
+        :usuario="orcamento.usuario"
         :data="orcamento.data"
-        :qtnPessoas="orcamento.qtnPessoas"
         :local="orcamento.local"
-        :bebidaAlcoolica="orcamento.bebidaAlcoolica"
-        :docinhos="orcamento.docinhos"
         @open="openDescricao"
       />
     </div>
+
+    <PaginacaoAdm 
+      :page="orcamentosStore.page" 
+      :totalPages="orcamentosStore.totalPages" 
+      @changePage="orcamentosStore.carregarOrcamentos({ page: $event })" 
+    />
   </div>
-  <div class="descricao" v-else>
-    <DescricaoOrcamento @fechar="fecharDescricao" :id="idSelecionado" :orcamentos="orcamentos" />
+
+  <div v-else class="descricao">
+    <DescricaoOrcamento 
+      @fechar="fecharDescricao" 
+      :id="idSelecionado" 
+      :orcamentos="orcamentosStore.orcamentos" 
+    />
   </div>
 </template>
 

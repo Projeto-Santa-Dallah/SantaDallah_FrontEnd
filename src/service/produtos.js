@@ -1,14 +1,14 @@
+// service/produtos.js
 import axios from 'axios'
 
 export default class ProdutosService {
-  async BuscarTodosOsProdutos() {
-    const { data } = await axios.get('/produtos/')
-    console.log('oi')
+  async BuscarTodosOsProdutos(params = {}) {
+    const { data } = await axios.get('/produtos/', { params })
     return data
   }
 
   async carregarProdutoDetalhado(id) {
-    const { data } = await axios.get(`http://seu-backend/api/produtos/${id}/`)
+    const { data } = await axios.get(`/produtos/${id}/`)
     return data
   }
 

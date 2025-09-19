@@ -3,20 +3,28 @@ import { ref, reactive, watch, onMounted } from "vue";
 import { useCategoriaStore } from "@/stores/categorias";
 import { useTamanhoStore } from "@/stores/tamanhos";
 import { useProdutosStore } from "@/stores/produtos";
-defineProps({
-    open: {
-        type: Boolean,
-        required: true,
-    },
-});
-const useCategorias = useCategoriaStore()
-const categoriaSelecionada = ref()
-const useTamanhos = useTamanhoStore()
-const tamanhoSelecionado = ref()
-const useProdutos = useProdutosStore()
+import ProdutosService from "@/service/produtos";
 
-const openAddProduto = ref(Boolean(open));
+// Props e emits
+const props = defineProps({
+    open: { type: Boolean, required: true },
+    idEditar: { type: Number, default: null }
+});
+const emit = defineEmits(["close"]);
+
+// Stores e services
+const useCategorias = useCategoriaStore();
+const useTamanhos = useTamanhoStore();
+const useProdutos = useProdutosStore();
+const produtosService = new ProdutosService();
+
+// States
+const openAddProduto = ref(props.open);
 const confirmacao = ref(false);
+const categoriaSelecionada = ref([]);
+const tamanhoSelecionado = ref(null);
+
+// Objeto reativo do produto
 const produto = reactive({
     id: null,
     nome: "",
@@ -30,8 +38,25 @@ const produto = reactive({
     foto: []
 });
 
-watch(openAddProduto, (newValue) => {
-    if (!newValue) {
+// Carregar categorias/tamanhos e produto para edição
+onMounted(async () => {
+    await useCategorias.getCategorias();
+    await useTamanhos.getTamanhos();
+
+    if (props.idEditar) {
+        const existente = await produtosService.carregarProdutoDetalhado(props.idEditar);
+        if (existente) {
+            Object.assign(produto, existente);
+            categoriaSelecionada.value = existente.categoria?.map(c => c.id) || [];
+            tamanhoSelecionado.value = existente.tamanho?.id || null;
+        }
+    }
+});
+
+// Resetar form ao fechar no modo cadastro
+watch(() => props.open, (novo) => {
+    openAddProduto.value = novo;
+    if (!novo && !props.idEditar) {
         Object.assign(produto, {
             id: null,
             nome: "",
@@ -44,103 +69,113 @@ watch(openAddProduto, (newValue) => {
             categoria: [],
             foto: []
         });
+        categoriaSelecionada.value = [];
+        tamanhoSelecionado.value = null;
     }
 });
 
-async function adicionarProduto() {
+// Função salvar (cadastro/edição)
+async function salvar() {
     try {
         produto.categoria = categoriaSelecionada.value;
         produto.tamanho = tamanhoSelecionado.value;
-        await useProdutos.salvarProduto({ ...produto }); // chama o store
+
+        if (props.idEditar) {
+            // update
+            await useProdutos.salvarProduto({ ...produto });
+        } else {
+            // create
+            await useProdutos.salvarProduto({ ...produto });
+        }
+
         confirmacao.value = true;
-    } catch {
-        console.log("Erro ao saLvar produto");
+        await useProdutos.carregarProdutos(); // recarregar lista
+    } catch (e) {
+        console.error("Erro ao salvar produto:", e);
     }
 }
-
-
-onMounted(() => {
-    useProdutos.getProduct();
-    useCategorias.getCategorias();
-    useTamanhos.getTamanhos();
-});
-
 </script>
 
 <template>
     <div class="container-add-produto" v-if="openAddProduto">
         <div class="tamanhos-header">
             <div class="header">
-                <h1 class="titulo-tamanhos">Cadastrar Produto</h1>
+                <h1 class="titulo-tamanhos">
+                    {{ props.idEditar ? "Editar Produto" : "Cadastrar Produto" }}
+                </h1>
             </div>
         </div>
-        <div class="container">
 
-            <form @submit.prevent="adicionarProduto">
-                <!-- Nome -->
+        <div class="container">
+            <form @submit.prevent="salvar">
                 <label for="nome">Nome:</label>
                 <input v-model="produto.nome" id="nome" type="text" required placeholder="Nome" />
 
-                <!-- Descrição -->
                 <label for="descricao">Descrição:</label>
                 <textarea v-model="produto.descricao" id="descricao" required placeholder="Descrição"></textarea>
 
-                <!-- Tipo -->
                 <label for="tipo">Tipo:</label>
                 <input v-model="produto.tipo" id="tipo" type="number" required placeholder="Tipo" />
-            
-                <!-- Sabor -->
+
                 <label for="sabor">Sabor:</label>
                 <input v-model="produto.sabor" id="sabor" type="text" required placeholder="Sabor" />
 
-
-                <!-- <label for="massa">Massa (kg)</label>
-        <input v-model="produto.tamanho.massakg" id="massa" type="text" /> -->
-
-                <!-- <label for="formato">Formato</label>
-        <input v-model="produto.tamanho.formato" id="formato" type="text" /> -->
-
                 <label for="categoria">Categoria:</label>
-                <select name="" id="" v-model="categoriaSelecionada" multiple>
+                <select v-model="categoriaSelecionada" multiple required>
                     <option disabled value="">-- Escolha uma opção --</option>
-                    <option v-for="categoria in useCategorias.categorias" :key="categoria.id" :value="categoria.id">{{
-                        categoria.nome }}</option>
+                    <option v-for="categoria in useCategorias.categorias" :key="categoria.id" :value="categoria.id">
+                        {{ categoria.nome }}
+                    </option>
                 </select>
-                        <div class="fatia-kg-formato">
-          <div class="container-cadastro">
-                        <!-- Validade -->
-                <label for="validade">Validade (dias):</label>
-                <input v-model="produto.validade" id="validade" type="number" required placeholder="Validade (dias)" />   
-        </div>
-          <div class="container-cadastro">
-        <!-- Preço -->
-                <label for="preco">Preço:</label>
-                <input v-model="produto.preco" id="preco" type="number" step="0.01" required placeholder="Preço" />  
-        </div>
-          <div class="container-cadastro">
-                        <!-- Tamanho -->
-                <label for="tamanho">Tamanho:</label>
-                <select name="" id="" v-model="tamanhoSelecionado">
-                    <option disabled value="">-- Escolha uma opção --</option>
-                    <option v-for="tamanho in useTamanhos.tamanhos" :key="tamanho.id" :value="tamanho.id">{{
-                        tamanho.nome }}</option>
-                </select>   
-        </div>
-        </div>
+
+                <div class="fatia-kg-formato">
+                    <!-- Validade -->
+                    <div class="container-cadastro">
+                        <label for="validade">Validade (dias):</label>
+                        <input v-model="produto.validade" id="validade" type="number" required
+                            placeholder="Validade (dias)" />
+                    </div>
+                    <div class="container-cadastro">
+                        <!-- Preço -->
+                        <label for="preco">Preço:</label>
+                        <input v-model="produto.preco" id="preco" type="number" step="0.01" required
+                            placeholder="Preço" />
+
+                    </div>
+                    <div class="container-cadastro">
+                        <label for="tamanho">Tamanho:</label>
+                        <select v-model="tamanhoSelecionado" required>
+                            <option disabled value="">-- Escolha uma opção --</option>
+                            <option v-for="tamanho in useTamanhos.tamanhos" :key="tamanho.id" :value="tamanho.id">
+                                {{ tamanho.nome }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Fotos -->
+        <label for="fotos">Fotos:</label>
+        <input id="fotos" type="file" multiple @change="handleFileChange" accept="image/*" />
+
+
                 <div class="buttons-container">
-                    <button class="button-cancelar" @click="$emit('close')">Cancelar</button>
-                    <button class="button" type="submit">Adicionar Produto</button>
+                    <button class="button-cancelar" @click.prevent="$emit('close')">Cancelar</button>
+                    <button class="button" type="submit">
+                        {{ props.idEditar ? "Salvar Alterações" : "Adicionar Produto" }}
+                    </button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Confirmação -->
     <div v-if="confirmacao" class="confirmacao">
         <div class="container">
             <div class="div-fechar">
                 <button class="fechar" @click="$emit('close')">x</button>
             </div>
-            <span>Produto cadastrado com sucesso!</span><svg width="34" height="32" viewBox="0 0 34 32" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <span>Produto {{ props.idEditar ? "atualizado" : "cadastrado" }} com sucesso!</span>
+            <svg width="34" height="32" viewBox="0 0 34 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M11 14.3333L16 19.3333L32.6667 2.66667M22.6667 1H9C6.19974 1 4.79961 1 3.73005 1.54497C2.78924 2.02433 2.02433 2.78924 1.54497 3.73005C1 4.79961 1 6.19974 1 9V23C1 25.8003 1 27.2004 1.54497 28.27C2.02433 29.2108 2.78924 29.9757 3.73005 30.455C4.79961 31 6.19974 31 9 31H23C25.8003 31 27.2004 31 28.27 30.455C29.2108 29.9757 29.9757 29.2108 30.455 28.27C31 27.2004 31 25.8003 31 23V16"
                     stroke="#AFE67E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -149,8 +184,9 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
 
+
+<style scoped>
 .container-add-produto {
     display: flex;
     flex-direction: column;

@@ -28,7 +28,7 @@ const router = useRouter();
     { text: 'Tamanhos', link: '/tamanhosAdmin' },
     { text: 'Categorias', link: '/categoriasAdmin' },
     { text: 'Pedidos', link: '/pedidosAdmin' },
-    { text: 'Orçamentos', link: '/orcamentoAdmin' },
+    { text: 'Orçamentos', link: '/orcamentoAdmin' },    
     { text: 'Clientes', link: '/clientesAdmin' },
     { text: 'Perfil', link: '/perfilAdmin' }
   ]

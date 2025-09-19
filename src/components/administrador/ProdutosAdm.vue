@@ -1,92 +1,81 @@
 <script setup>
 import ProdutoAdm from "./ProdutoAdm.vue";
-import DescricaoProduto from './DescricaoProduto.vue'
-import { onMounted, ref } from 'vue'
-import { useProdutosStore } from '@/stores/produtos'
+import DescricaoProduto from './DescricaoProduto.vue';
+import CadastrarProduto from '@/components/filtros/CadastrarProduto.vue'
+import { useCategoriaFiltroStore} from '@/stores/CategoriaFiltros.js'
+import { onMounted, ref } from 'vue';
+import { useProdutosStore } from '@/stores/produtos';
+import PaginacaoAdm from './PaginacaoAdm.vue'
 
-const produtosStore = useProdutosStore()
-const DescricaoAberta = ref(false)
-const idSelecionado = ref(0)
+const produtosStore = useProdutosStore();
+const CategoriaFiltroStore = useCategoriaFiltroStore();
+// Estados
+const DescricaoAberta = ref(false);
+const EditarAberto = ref(false);
+const idSelecionado = ref(null);
+const idEditar = ref(null);
 
+// Funções descrição
 function openDescricao(id) {
-  DescricaoAberta.value = true
-  idSelecionado.value = id
+  DescricaoAberta.value = true;
+  idSelecionado.value = id;
 }
-function fecharDescricao(){
-  DescricaoAberta.value = false
+function fecharDescricao() {
+  DescricaoAberta.value = false;
+  idSelecionado.value = null;
 }
+
+// Funções edição
+function openEdicao(id) {
+  EditarAberto.value = true;
+  idEditar.value = id;
+}
+function fecharEdicao() {
+  EditarAberto.value = false;
+  idEditar.value = null;
+}
+
+
 
 onMounted(async () => {
-  await produtosStore.carregarProdutos()
-})
-
-
-// const produtos = [
-//   {
-//     id: 1,
-//     nome: "Banoffi",
-//     descricao: "Base de biscoito com castanha, doce de leite cozido, bananas frescas fatiadas e creme de baunilha",
-//     tipo: 1,
-//     validade: 4,
-//     preco: "75.00",
-//     sabor: "Banana e doce de leite",
-//     tamanho: {
-//       id: 1,
-//       nome: "P",
-//       qtdFatia: 6,
-//       massakg: "0.00",
-//       formato: "redondo",
-//       categoria: 1
-//     },
-//     categoria: [
-//       {
-//         id: 1,
-//         nome: "Torta",
-//         descricao: "Produto doce a base de farinha com recheios variados."
-//       }
-//     ]
-//   },
-//   {
-//     id: 2,
-//     nome: "Brigadeiro Tradicional",
-//     descricao: "brigadeiro com chocolate 50% com confeito padrão SPLIT.",
-//     tipo: 1,
-//     validade: 3,
-//     preco: "2.45",
-//     sabor: "Chocolate 50%",
-//     tamanho: null,
-//     categoria: [
-//       {
-//         id: 3,
-//         nome: "Brigadeiro",
-//         descricao: "Produto a base de leite condensado e manteiga, podendo ter variados sabores."
-//       },
-//       {
-//         id: 7,
-//         nome: "Recheio",
-//         descricao: "Sabores de recheio dos bolos vulcões"
-//       }
-//     ]
-//   }
-// ];
+  await produtosStore.carregarProdutos();
+});
 </script>
 
-
 <template>
-  <!-- <h1>{{idSelecionado}}</h1> -->
-  <div v-if="DescricaoAberta == false" class="produtos">
+  <div v-if="!DescricaoAberta && !EditarAberto" class="produtos">
     <slot></slot>
     <div class="produto" v-for="produto in produtosStore.produtos" :key="produto.id">
-      <!-- <h1>{{ produtosStore.produtos }}</h1> -->
-      <ProdutoAdm :id="produto.id" :nome="produto.nome" :preco="produto.preco" :foto="produto.foto_url"
-        @open="openDescricao" />
+      <ProdutoAdm 
+        :id="produto.id" 
+        :nome="produto.nome" 
+        :preco="produto.preco" 
+        :foto="produto.foto_url"
+        @open="openDescricao"
+        @editar="openEdicao"/>
     </div>
+     <PaginacaoAdm 
+  :page="produtosStore.page" 
+  :totalPages="produtosStore.totalPages" 
+  @changePage="produtosStore.carregarProdutos({ page: $event })" 
+/>
   </div>
-  <div class="descricao" v-else>
-  <DescricaoProduto @fechar="fecharDescricao" :id="idSelecionado" />
-</div>
-</template>
 
+  <div class="descricao" v-else-if="DescricaoAberta">
+    <DescricaoProduto 
+      :id="idSelecionado" 
+      @fechar="fecharDescricao" 
+    />
+  </div>
+
+  <!-- Modal cadastro/edição -->
+  <CadastrarProduto
+  v-else-if="EditarAberto" 
+    :open="EditarAberto"
+    :idEditar="idEditar"
+    @close="fecharEdicao"
+  />
+</template>
 
 <style scoped>
 .produtos, .descricao {
@@ -97,12 +86,10 @@ onMounted(async () => {
   margin-bottom: 100px;
 }
 
-
 .produto {
   width: 100%;
   padding: 5px;
 }
-
 
 .produtos.two-products {
   justify-content: flex-start;
