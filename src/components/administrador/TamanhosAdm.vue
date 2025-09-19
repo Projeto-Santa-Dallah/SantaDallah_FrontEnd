@@ -3,52 +3,44 @@ import { onMounted, ref } from 'vue';
 import TamanhoAdm from './TamanhoAdm.vue'
 import { useTamanhoStore } from '@/stores/tamanhos';
 import DescricaoTamanho from '@/components/administrador/DescricaoTamanho.vue'
+import CadastrarTamanho from '@/components/filtros/CadastrarTamanho.vue'
+import PaginacaoAdm from './PaginacaoAdm.vue'
+
+
 const tamanhoStore = useTamanhoStore();
+
 const DescricaoAberta = ref(false)
+const EditarAberto = ref(false)
+
 const idSelecionado = ref(0)
+const idEditar = ref(null)
 
 function openDescricao(id) {
   DescricaoAberta.value = true
   idSelecionado.value = id
 }
+
 function fecharDescricao(){
   DescricaoAberta.value = false
 }
+
+function editarTamanho(id) {
+  idEditar.value = id
+  EditarAberto.value = true
+}
+
+function fecharEdicao() {
+  EditarAberto.value = false
+  idEditar.value = null
+}
+
 onMounted(() => {
   tamanhoStore.getTamanhos();
 });
-
-// const tamanhos = [
-//   {
-//     id: 1,
-//     nome: 'P',
-//     qtdFatia: 6,
-//     massakg: '0.00',
-//     formato: 'redondo',
-//     categoria: {
-//       id: 1,
-//       nome: 'Torta',
-//       descricao: 'Produto doce a base de farinha com recheios variados.'
-//     }
-//   },
-//   {
-//     id: 2,
-//     nome: 'M',
-//     qtdFatia: 8,
-//     massakg: '0.50',
-//     formato: 'quadrado',
-//     categoria: {
-//       id: 2,
-//       nome: 'Bolo',
-//       descricao: 'Bolo tradicional com cobertura.'
-//     }
-//   }
-// ]
 </script>
 
 <template>
-  <!-- <h1>{{idSelecionado}}</h1> -->
-  <div v-if="DescricaoAberta == false" class="tamanhos">
+  <div v-if="!DescricaoAberta && !EditarAberto" class="tamanhos">
     <slot></slot>
     <div class="tamanho" v-for="tamanho in tamanhoStore.tamanhos" :key="tamanho.id">
       <TamanhoAdm
@@ -59,12 +51,27 @@ onMounted(() => {
         :formato="tamanho.formato"
         :categoria="tamanho.categoria"
         @open="openDescricao" 
+        @editar="editarTamanho"
       />
     </div>
+     <PaginacaoAdm 
+  :page="tamanhoStore.page" 
+  :totalPages="tamanhoStore.totalPages" 
+  @changePage="tamanhoStore.getTamanhos({ page: $event })" 
+/>
   </div>
-    <div class="descricao" v-else>
-  <DescricaoTamanho @fechar="fecharDescricao" :id="idSelecionado" />
-</div>
+
+  <div class="descricao" v-else-if="DescricaoAberta">
+    <DescricaoTamanho @fechar="fecharDescricao" :id="idSelecionado" />
+  </div>
+
+  <div v-else-if="EditarAberto">
+    <CadastrarTamanho 
+      :open="EditarAberto"
+      :idEditar="idEditar"
+      @close="fecharEdicao"
+    />
+  </div>
 </template>
 
 <style scoped>

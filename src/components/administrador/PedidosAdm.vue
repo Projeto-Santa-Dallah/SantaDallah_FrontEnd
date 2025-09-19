@@ -1,8 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { usePedidosStore } from '@/stores/pedidos'
 import PedidoAdm from './PedidoAdm.vue'
 import DescricaoPedido from './DescricaoPedido.vue'
+import PaginacaoAdm from './PaginacaoAdm.vue'
 
+const pedidosStore = usePedidosStore()
 const DescricaoAberta = ref(false)
 const idSelecionado = ref(0)
 
@@ -14,62 +17,24 @@ function fecharDescricao() {
   DescricaoAberta.value = false
 }
 
-// Dados mockados
-const pedidos = [
-  {
-    id: 1,
-    usuario: { id: 7, nome: "Isabelli Luísa", email: "isa@example.com" },
-    status: 2,
-    status_display: "Realizado",
-    data_pedido: "2025-09-30",
-    horario_entrega: "14:00:00",
-    formaDeRetirada: 2,
-    formaDeRetirada_display: "Entrega",
-    total: 150.00,
-    valor_pago: 75.00,
-    itens: [
-      {
-        id: 101,
-        produto: { id: 55, nome: "Bolo 3 brigadeiros" },
-        quantidade: 1
-      },
-      {
-        id: 102,
-        produto: { id: 56, nome: "50 brigadeiros de pistache" },
-        quantidade: 1
-      }
-    ]
-  },
-  {
-    id: 2,
-    usuario: { id: 8, nome: "João Pedro", email: "joao@example.com" },
-    status: 3,
-    status_display: "Pago",
-    data_pedido: "2025-09-29",
-    horario_entrega: "18:00:00",
-    formaDeRetirada: 1,
-    formaDeRetirada_display: "Retirada",
-    total: 120.00,
-    valor_pago: 120.00,
-    itens: [
-      { id: 201, produto: { id: 60, nome: "Torta de Limão" }, quantidade: 2 }
-    ]
-  }
-]
+onMounted(() => {
+  pedidosStore.carregarPedidos()
+})
 </script>
 
 <template>
   <div v-if="!DescricaoAberta" class="pedidos">
-          <div class="tamanhos-header">
-        <div class="header">
-          <h1 class="titulo-tamanhos">Pedidos</h1>
-          <span> (58 encontrados)</span>
-        </div>
+    <div class="pedidos-header">
+      <div class="header">
+        <h1 class="titulo-tamanhos">Pedidos</h1>
+        <span>({{ pedidosStore.pedidos.length }} encontrados)</span>
       </div>
-    <div class="pedido" v-for="pedido in pedidos" :key="pedido.id">
+    </div>
+
+    <div class="pedido" v-for="pedido in pedidosStore.pedidos" :key="pedido.id">
       <PedidoAdm
         :id="pedido.id"
-        :cliente="pedido.usuario.nome"
+        :cliente="pedido.usuario"
         :data="pedido.data_pedido"
         :horario="pedido.horario_entrega"
         :total="pedido.total"
@@ -79,9 +44,15 @@ const pedidos = [
         @open="openDescricao"
       />
     </div>
+    <PaginacaoAdm 
+  :page="pedidosStore.page" 
+  :totalPages="pedidosStore.totalPages" 
+  @changePage="pedidosStore.carregarPedidos({ page: $event })" 
+/>
   </div>
+
   <div class="descricao" v-else>
-    <DescricaoPedido @fechar="fecharDescricao" :id="idSelecionado" :pedidos="pedidos" />
+    <DescricaoPedido @fechar="fecharDescricao" :id="idSelecionado" :pedidos="pedidosStore.pedidos" />
   </div>
 </template>
 

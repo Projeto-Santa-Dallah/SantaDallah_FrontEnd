@@ -1,202 +1,93 @@
-import { ref, watch } from 'vue'
-import { defineStore } from 'pinia'
-import { useFiltroStore } from './filtros';
-import { useRoute } from 'vue-router';
-export const useCategoriaFiltroStore = defineStore('categoriaFiltro', () => {
+import { defineStore } from "pinia";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
-const FiltrosStore = useFiltroStore();
-const route = useRoute();
-const watchBoloVovoDallah = ref([]);
-const watchBoloDecorado = ref([]);
-const watchBoloVulcao = ref([]);
-const watchTortas = ref([]);
-const watchBrigadeiros = ref([]);
+import { useProdutosStore } from "./produtos";
+import { useTamanhoStore } from "./tamanhos";
+import { useCategoriaStore } from "./categorias";
+import { usePedidosStore } from "./pedidos"; // import da store de pedidos
 
-// Função que será chamada sempre que `valor` mudar
-const MudarBoloVovoDallah = (novoValor) => {
-  FiltrosStore.boloVovoDallah = novoValor;
-};
+export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
+  const route = useRoute();
 
-const MudarBoloDecorado = (novoValor) => {
-  FiltrosStore.soloDecbrado = novoValor;
-};
+  // outras stores
+  const produtosStore = useProdutosStore();
+  const tamanhosStore = useTamanhoStore();
+  const categoriasStore = useCategoriaStore();
+  const pedidosStore = usePedidosStore();
 
-const MudarBoloVulcao = (novoValor) => {
-  FiltrosStore.boloVulcao = novoValor;
-};
-const MudarTortas = (novoValor) => {
-  FiltrosStore.tortas = novoValor;
-};
-const MudarBrigadeiros = (novoValor) => {
-  FiltrosStore.brigadeiros= novoValor;
-};
-watch(watchBoloVovoDallah, MudarBoloVovoDallah);
-watch(watchBoloDecorado, MudarBoloDecorado);
-watch(watchBoloVulcao, MudarBoloVulcao);
-watch(watchTortas, MudarTortas);
-watch(watchBrigadeiros, MudarBrigadeiros);
-const BoloVovoDallahAberto = ref(true);
-const BoloDecoradoAberto = ref(false);
-const BoloVulcaosAberto = ref(false);
-const TortasAberto = ref(false);
-const BrigadeirosAberto = ref(false);
+  // estado
+  const filtroSelecionado = ref(null);
+  const filtros = ref([]);
 
-    // Função para redefinir as variáveis
-    const resetFilters = () => {
-      watchBoloVovoDallah.value = [];
-      FiltrosStore.boloVovoDallah = [];
-      watchBoloDecorado.value = [];
-      FiltrosStore.boloDecorado = [];
-      watchBoloVulcao.value = [];
-      FiltrosStore.boloVulcao = [];
-    };
+  // quando rota mudar, define filtros iniciais
+  watch(
+    () => route.path,
+    async (novaRota) => {
+      filtroSelecionado.value = null;
 
-    // Watcher para detectar mudanças na rota
-    watch(route, resetFilters);
-  // const admProdutos = ref([
-  //   {
-  //     titulo: "Bolo vovó Dallah",
-  //     funcao: () => {
-  //       watchBoloVovoDallah.value = [];
-  //       FiltrosStore.boloVovoDallah = [];
-  //       BoloVovoDallahAberto.value = false;
-  //     },
-  //     aberto: BoloVovoDallahAberto,
-  //     model: watchBoloVovoDallah,
-  //     array: [
-  //       {
-  //         nome: "Sabor",
-  //         value: "Sabor",
-  //       },
-  //       {
-  //         nome: "Tamanho",
-  //         value: "Tamanho",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     titulo: "Bolos decorados",
-  //     funcao: () => {
-  //       watchBoloDecorado.value = [];
-  //       FiltrosStore.BoloDecorado = [];
-  //       BoloDecoradoAberto.value = false;
-  //     },
-  //     aberto: BoloDecoradoAberto,
-  //     model: watchBoloDecorado,
-  //     array: [
-  //       {
-  //         nome: "Sabor",
-  //         value: "Sabor",
-  //       },
-  //       {
-  //         nome: "Tamanho",
-  //         value: "Tamanho",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     titulo: "Bolo vulcão",
-  //     funcao: () => {
-  //       watchBoloVulcao.value = [];
-  //       FiltrosStore.boloVulcao = [];
-  //       BoloVulcaosAberto.value = false;
-  //     },
-  //     aberto: BoloVulcaosAberto,
-  //     model: watchBoloVulcao,
-  //     array: [
-  //       {
-  //         nome: "Sabor",
-  //         value: "Sabor",
-  //       },
-  //       {
-  //         nome: "Tamanho",
-  //         value: "Tamanho",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     titulo: "Tortas",
-  //     funcao: () => {
-  //       watchTortas.value = [];
-  //       FiltrosStore.tortas = [];
-  //       TortasAberto.value = false;
-  //     },
-  //     aberto: TortasAberto,
-  //     model: watchTortas,
-  //     array: [
-  //       {
-  //         nome: "Sabor",
-  //         value: "Sabor",
-  //       },
-  //       {
-  //         nome: "Tamanho",
-  //         value: "Tamanho",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     titulo: "Brigadeiros",
-  //     funcao: () => {
-  //       watchBrigadeiros.value = [];
-  //       FiltrosStore.brigadeiros = [];
-  //       BrigadeirosAberto.value = false;
-  //     },
-  //     aberto: BrigadeirosAberto,
-  //     model: watchBrigadeiros,
-  //     array: [
-  //       {
-  //         nome: "Sabor",
-  //         value: "Sabor",
-  //       },
-  //       {
-  //         nome: "Tamanho",
-  //         value: "Tamanho",
-  //       },
-  //     ],
-  //   },
-  // ]);
-   const admProdutos = ref([
-     {
-      titulo: "Todos",
-      funcao: () => {
-        watchBoloVovoDallah.value = [];
-        FiltrosStore.boloVovoDallah = [];
-        BoloVovoDallahAberto.value = false;
-      },
-      aberto: BoloVovoDallahAberto,
-      model: watchBoloVovoDallah,
+      if (novaRota === "/produtosAdmin" || novaRota === "/tamanhosAdmin") {
+        // garante que categorias estão carregadas
+        if (!categoriasStore.categorias.length) {
+          await categoriasStore.getCategorias();
+        }
+
+        filtros.value = [
+          { titulo: "Todos", value: "todos" },
+          ...categoriasStore.categorias.map((c) => ({
+            titulo: c.nome,
+            value: c.id,
+          })),
+        ];
+      } else if (novaRota === "/categoriasAdmin") {
+        filtros.value = [{ titulo: "Todos", value: "todos" }];
+      } else if (novaRota === "/pedidosAdmin") {
+        filtros.value = [
+          { titulo: "Todos", value: "0" },
+          { titulo: "Carrinho", value: "1" },
+          { titulo: "Realizado", value: "2" },
+          { titulo: "Pago", value: "3" },
+          { titulo: "Entregue", value: "4" },
+        ];
+      } else if (novaRota === "/orcamentoAdmin") {
+        filtros.value = [{ titulo: "Todos", value: "todos" }];
+      } else {
+        filtros.value = [];
+      }
     },
-    {
-      titulo: "Em andamento",
-      funcao: () => {
-        watchBoloVovoDallah.value = [];
-        FiltrosStore.boloVovoDallah = [];
-        BoloVovoDallahAberto.value = false;
-      },
-      aberto: BoloVovoDallahAberto,
-      model: watchBoloVovoDallah,
-    },
-    {
-      titulo: "Entregues",
-      funcao: () => {
-        watchBoloDecorado.value = [];
-        FiltrosStore.BoloDecorado = [];
-        BoloDecoradoAberto.value = false;
-      },
-      aberto: BoloDecoradoAberto,
-      model: watchBoloDecorado,
-    },
-    {
-      titulo: "Cancelados",
-      funcao: () => {
-        watchBoloVulcao.value = [];
-        FiltrosStore.boloVulcao = [];
-        BoloVulcaosAberto.value = false;
-      },
-      aberto: BoloVulcaosAberto,
-      model: watchBoloVulcao,
-    },
-  ]);
+    { immediate: true }
+  );
 
+  // aplicar filtro
+  const selecionarFiltro = async (value) => {
+    filtroSelecionado.value = value;
 
-  return { BoloVovoDallahAberto, BoloDecoradoAberto, BoloVulcaosAberto, TortasAberto, BrigadeirosAberto, admProdutos};})
+    if (route.path === "/produtosAdmin") {
+      const params = value === "todos" ? {} : { categoria__id: value };
+      await produtosStore.carregarProdutos(params);
+    }
+
+    if (route.path === "/tamanhosAdmin") {
+      const params = value === "todos" ? {} : { categoria__id: value };
+      await tamanhosStore.getTamanhos(params);
+    }
+
+    if (route.path === "/categoriasAdmin") {
+      await categoriasStore.getCategorias();
+    }
+
+    if (route.path === "/pedidosAdmin") {
+      const params = value === "todos" ? {} : { status: value };
+      await pedidosStore.carregarPedidos(params);
+    }
+
+    // se futuramente você tiver uma store de orçamentos, pode adicionar aqui
+    // ex: if (route.path === "/orcamentosAdmin") { await orcamentosStore.carregarOrcamentos(params); }
+  };
+
+  return {
+    filtros,
+    filtroSelecionado,
+    selecionarFiltro,
+  };
+});
