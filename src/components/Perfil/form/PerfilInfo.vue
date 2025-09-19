@@ -14,7 +14,7 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-  }); formatDate(usuario.last_login) || 'Nunca logado' 
+  });
 };
 
   watch(() => props.DadosUser, (newVal) => {

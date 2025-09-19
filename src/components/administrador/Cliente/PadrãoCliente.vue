@@ -123,6 +123,8 @@ div img {
     height: 60px;
     border-radius: 50px;
     border: 5px solid #bf99c8ab;
+    object-fit: cover;
+
 }
 
 .informacoes {
