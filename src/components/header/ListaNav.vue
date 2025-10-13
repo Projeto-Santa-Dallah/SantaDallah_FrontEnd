@@ -1,10 +1,17 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import {computed} from 'vue'
-import { useTemplateStore } from '@/stores/template/template';
-const TemplateStore= useTemplateStore()
-const titulos=computed(() =>{
-  return TemplateStore.isAdmin?TemplateStore.adminTitles:TemplateStore.titles
+import { RouterLink, useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useTemplateStore } from '@/stores/template/template'
+
+const TemplateStore = useTemplateStore()
+const route = useRoute()
+
+// Detecta se a rota atual é do admin
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
+
+// Define os títulos com base no tipo de rota
+const titulos = computed(() => {
+  return isAdminRoute.value ? TemplateStore.adminTitles : TemplateStore.titles
 })
 </script>
 
@@ -40,6 +47,7 @@ nav {
 .router-link {
   text-decoration: none;
 }
+
 .router-link-exact-active .nav-item {
   font-weight: bold;
 }
