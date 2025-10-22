@@ -7,12 +7,10 @@
  
     <div>
       <div class="circulo-grande">
-        <div class="fotoGrande"></div>
+        <img src="/src/assets/imagens/fotogrande.jpeg" alt="" class="fotoGrande">
         <div class='div-pequena'>
             <div class='circulo-pequeno'>
-                <div class='FotoPequena'>
-                    
-                </div>
+               <img src="/src/assets/imagens/fotopequena.jpeg" alt="" class='FotoPequena'>
             </div>
         </div>
       </div>
@@ -33,6 +31,7 @@
       >
     </div>
   </section>
+  
 </template>
 
 <style scoped>
@@ -66,7 +65,7 @@ span {
 .circulo-grande {
   width: 400px;
   height: 400px;
-  background-color: blue;
+  background-color: #BF99C8;
   border-radius: 50%;
 }
 
@@ -76,13 +75,14 @@ span {
   background-color: pink;
   border-radius: 50%;
   position:relative;
-  left: 40px
+  left: 40px;
+  object-fit: cover;
 }
 
 .circulo-pequeno{
     width:260px;
     height:260px;
-    background-color: yellow;
+    background-color: white;
     border-radius: 50%;
     position:relative;
    top: -100px;
@@ -93,11 +93,12 @@ span {
 .FotoPequena{
     width: 220px;
     height: 220px;
-    background-color: red;
     border-radius: 50%;
     position:relative;
     margin: auto;
-    top:20px
+    top:20px;
+     object-fit: cover;
+     left:18px
 }
 
 
