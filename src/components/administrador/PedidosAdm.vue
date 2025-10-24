@@ -4,25 +4,47 @@ import { usePedidosStore } from '@/stores/pedidos'
 import PedidoAdm from './PedidoAdm.vue'
 import DescricaoPedido from './DescricaoPedido.vue'
 import PaginacaoAdm from './PaginacaoAdm.vue'
+import LoadingComponent from '@/components/carregamento/LoadingComponent.vue'
 
 const pedidosStore = usePedidosStore()
 const DescricaoAberta = ref(false)
 const idSelecionado = ref(0)
+const isLoading = ref(false) 
 
 function openDescricao(id) {
   DescricaoAberta.value = true
   idSelecionado.value = id
 }
+
 function fecharDescricao() {
   DescricaoAberta.value = false
 }
 
+// 🔹 Função principal de carregamento (com loading e scroll)
+async function carregarPedidos(page = 1) {
+  try {
+    isLoading.value = true
+    await pedidosStore.carregarPedidos({ page })
+    
+    // 🔸 Após carregar, rola suavemente para o topo
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  } finally {
+    isLoading.value = false
+  }
+}
+
 onMounted(() => {
-  pedidosStore.carregarPedidos()
+  carregarPedidos()
 })
 </script>
 
 <template>
+  <!-- Tela de carregamento -->
+  <LoadingComponent v-if="isLoading" />
+
   <div v-if="!DescricaoAberta" class="pedidos">
     <div class="pedidos-header">
       <div class="header">
@@ -44,15 +66,21 @@ onMounted(() => {
         @open="openDescricao"
       />
     </div>
+
+    <!-- Paginação com carregamento e scroll -->
     <PaginacaoAdm 
-  :page="pedidosStore.page" 
-  :totalPages="pedidosStore.totalPages" 
-  @changePage="pedidosStore.carregarPedidos({ page: $event })" 
-/>
+      :page="pedidosStore.page" 
+      :totalPages="pedidosStore.totalPages" 
+      @changePage="carregarPedidos"
+    />
   </div>
 
   <div class="descricao" v-else>
-    <DescricaoPedido @fechar="fecharDescricao" :id="idSelecionado" :pedidos="pedidosStore.pedidos" />
+    <DescricaoPedido 
+      @fechar="fecharDescricao" 
+      :id="idSelecionado" 
+      :pedidos="pedidosStore.pedidos" 
+    />
   </div>
 </template>
 
@@ -64,28 +92,34 @@ onMounted(() => {
   width: 71vw;
   margin-bottom: 100px;
 }
+
 .pedido {
   width: 100%;
   padding: 5px 0;
 }
+
 span {
   color: #bf99c8;
   font-size: 16px;
 }
+
 h1 {
   margin-right: 10px;
   color: #191645;
   font-size: 24px;
 }
+
 .header {
   display: flex;
   align-items: center;
 }
+
 .filtro-tamanhos {
   display: flex;
   flex-direction: row;
   margin-top: 80px;
 }
+
 .titulo-tamanhos {
   font-size: 24px;
   font-weight: 600;
