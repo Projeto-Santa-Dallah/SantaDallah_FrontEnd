@@ -5,43 +5,64 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-// Verifica se está em uma rota onde a div deve ser escondida
+// Esconde breadcrumb na home normal e na home admin
 const ocultarRotaAtual = computed(() => {
-  return route.path === '/' || route.path === '/homeAdmin';
+  return route.path === "/" || route.path === "/admin";
 });
 
 // Remove '/all' da URL e separa em partes
-const path = computed(() => route.path.replace('/all', ''));
+const path = computed(() => route.path.replace("/all", ""));
 const partesRota = computed(() => {
   const parts = path.value.split("/").filter(Boolean);
   return parts.length > 0 ? parts : ["Home"];
 });
 
-// Caminhos acumulativos baseados nas partes
+// Caminhos acumulativos
 const caminhos = computed(() => {
   return partesRota.value.map((_, index) => {
-    return '/' + partesRota.value.slice(0, index + 1).join('/');
+    return "/" + partesRota.value.slice(0, index + 1).join("/");
   });
 });
 
-// Mapeia os nomes das rotas a partir dos caminhos
+// Nomes amigáveis das rotas
 const nomesDasRotas = computed(() => {
   return caminhos.value.map((p) => {
+    if (p === "/admin") return "Home Administrador";
+    if (p === "/") return "Home";
     const rotaCorrespondente = router.getRoutes().find((r) => r.path === p);
     return rotaCorrespondente?.name || p;
   });
 });
+
+// Verifica se está numa rota admin
+const isAdminRoute = computed(() => route.path.startsWith("/admin"));
 </script>
 
 <template>
   <div v-if="!ocultarRotaAtual" class="rota-atual">
-    <RouterLink class="link" to="/">Home</RouterLink>
-    <span v-if="nomesDasRotas.length > 0"> &gt; </span>
+    <!-- Só mostra o Home normal se não for rota de admin -->
+    <RouterLink
+      v-if="!isAdminRoute"
+      class="link"
+      to="/"
+    >
+      Home
+    </RouterLink>
 
-    <span v-for="(nome, index) in nomesDasRotas" :key="index"
-      :class="{ 'hidden-admin': partesRota[index] === 'admin', 'active': index === nomesDasRotas.length - 1 }">
-      <RouterLink :to="caminhos[index]" class="link"
-        :class="{ 'hidden-admin': partesRota[index] === 'admin', 'active': index === nomesDasRotas.length - 1 }">
+    <span
+      v-if="nomesDasRotas.length > 0 && !isAdminRoute"
+    > &gt; </span>
+
+    <span
+      v-for="(nome, index) in nomesDasRotas"
+      :key="index"
+      :class="{ 'active': index === nomesDasRotas.length - 1 }"
+    >
+      <RouterLink
+        :to="caminhos[index]"
+        class="link"
+        :class="{ 'active': index === nomesDasRotas.length - 1 }"
+      >
         <span v-if="index === nomesDasRotas.length - 1">
           <strong>{{ nome }}</strong>
         </span>
@@ -71,10 +92,6 @@ const nomesDasRotas = computed(() => {
 
 .active {
   font-weight: bold;
-}
-
-.hidden-admin {
-  display: none;
 }
 
 span {
