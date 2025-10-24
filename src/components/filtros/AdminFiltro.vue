@@ -1,10 +1,13 @@
 <script setup>
 import { useCategoriaFiltroStore } from "@/stores/CategoriaFiltros";
 import ItensSelect from "./ItensSelect.vue";
+import LoadingComponent from '@/components/carregamento/LoadingComponent.vue'
 const CategoriaFiltrosStore = useCategoriaFiltroStore();
+
 </script>
 
 <template>
+    <LoadingComponent v-if="CategoriaFiltrosStore.isLoading"/>
   <div class="filtros">
     <span class="subtitulo filtro-titulo">Estado dos pedidos </span>
     <ItensSelect :filtroLista="CategoriaFiltrosStore.admProdutos" />

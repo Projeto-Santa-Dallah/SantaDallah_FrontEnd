@@ -1,18 +1,29 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useClienteStore } from '@/stores/cliente';
 import AdminFiltro from '@/components/filtros/AdminFiltro.vue';
+import LoadingComponent from '@/components/carregamento/LoadingComponent.vue'
 const useCliente = useClienteStore()
+const isLoading = ref(false) 
+async function carregarClientes() {
+  try {
+    isLoading.value = true
+    await useCliente.getClientes()
+  } finally {
+    isLoading.value = false
+  }
+}
 
 onMounted(() => {
-    useCliente.getClientes()
+  carregarClientes()
 })
 
 
 </script>
 
 <template>
+    <LoadingComponent v-if="isLoading"/>
     <section class="clientes">
         <AdminFiltro></AdminFiltro>
         <section class="clientes-list">

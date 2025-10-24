@@ -20,6 +20,9 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
   const filtroSelecionado = ref(null);
   const filtros = ref([]);
 
+  // 🔹 ref de loading só pra você ver quando está puxando
+  const isLoading = ref(false);
+
   // quando rota mudar, define filtros iniciais
   watch(
     () => route.path,
@@ -27,11 +30,10 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
       filtroSelecionado.value = null;
 
       if (novaRota === "/produtosAdmin" || novaRota === "/tamanhosAdmin") {
-        // garante que categorias estão carregadas
+        isLoading.value = true;
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
         }
-
         filtros.value = [
           { titulo: "Todos", value: "todos" },
           ...categoriasStore.categorias.map((c) => ({
@@ -39,6 +41,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
             value: c.id,
           })),
         ];
+        isLoading.value = false;
       } else if (novaRota === "/categoriasAdmin") {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
       } else if (novaRota === "/pedidosAdmin") {
@@ -61,6 +64,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
   // aplicar filtro
   const selecionarFiltro = async (value) => {
     filtroSelecionado.value = value;
+    isLoading.value = true;
 
     if (route.path === "/produtosAdmin") {
       const params = value === "todos" ? {} : { categoria__id: value };
@@ -81,13 +85,14 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
       await pedidosStore.carregarPedidos(params);
     }
 
-    // se futuramente você tiver uma store de orçamentos, pode adicionar aqui
-    // ex: if (route.path === "/orcamentosAdmin") { await orcamentosStore.carregarOrcamentos(params); }
+    isLoading.value = false;
+    console.log("Filtro carregado! Loading:", isLoading.value);
   };
 
   return {
     filtros,
     filtroSelecionado,
     selecionarFiltro,
+    isLoading, // 🔹 expõe pra usar em qualquer componente
   };
 });

@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink} from 'vue-router'
 import {computed} from 'vue'
 import { useTemplateStore } from '@/stores/template/template';
 const TemplateStore= useTemplateStore()
