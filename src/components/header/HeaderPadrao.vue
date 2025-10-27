@@ -29,7 +29,7 @@ header {
   align-items: center;
   background-color: rgba(0, 255, 255, 0);
   padding: 20px 100px;
-  z-index: 9999999999999999999999999999999999999999999999999999999;
+  z-index: 99999999;
 }
 
 .logo {
