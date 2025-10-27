@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios'
+
 const form = ref({
   tefefone: '',
   nome: '',
@@ -153,7 +154,8 @@ const enviarEmail = async () => {
 <style scoped>
 h1 {
   text-align: center;
-  font-size: 24px
+  font-size: 24px;
+  margin-top: 6vh;
 }
 
 h2 {
