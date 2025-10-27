@@ -29,7 +29,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     async (novaRota) => {
       filtroSelecionado.value = null;
 
-      if (novaRota === "/produtosAdmin" || novaRota === "/tamanhosAdmin") {
+      if (novaRota === "/admin/produtos" || novaRota === "/admin/tamanhos") {
         isLoading.value = true;
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
@@ -42,9 +42,9 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
           })),
         ];
         isLoading.value = false;
-      } else if (novaRota === "/categoriasAdmin") {
+      } else if (novaRota === "/admin/categorias") {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
-      } else if (novaRota === "/pedidosAdmin") {
+      } else if (novaRota === "/admin/pedidos") {
         filtros.value = [
           { titulo: "Todos", value: "0" },
           { titulo: "Carrinho", value: "1" },
@@ -52,7 +52,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
           { titulo: "Pago", value: "3" },
           { titulo: "Entregue", value: "4" },
         ];
-      } else if (novaRota === "/orcamentoAdmin") {
+      } else if (novaRota === "/admin/orcamento") {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
       } else {
         filtros.value = [];
@@ -66,21 +66,21 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     filtroSelecionado.value = value;
     isLoading.value = true;
 
-    if (route.path === "/produtosAdmin") {
+    if (route.path === "/admin/produtos") {
       const params = value === "todos" ? {} : { categoria__id: value };
       await produtosStore.carregarProdutos(params);
     }
 
-    if (route.path === "/tamanhosAdmin") {
+    if (route.path === "/admin/tamanhos") {
       const params = value === "todos" ? {} : { categoria__id: value };
       await tamanhosStore.getTamanhos(params);
     }
 
-    if (route.path === "/categoriasAdmin") {
+    if (route.path === "/admin/categorias") {
       await categoriasStore.getCategorias();
     }
 
-    if (route.path === "/pedidosAdmin") {
+    if (route.path === "/admin/pedidos") {
       const params = value === "todos" ? {} : { status: value };
       await pedidosStore.carregarPedidos(params);
     }
