@@ -1,40 +1,56 @@
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup>
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
-// Importa todas as imagens da pasta de forma estática
-const imagens = import.meta.glob('@/assets/imagens/*.png', {
-  eager: true,
-  import: 'default',
+const imagens = ref([]);
+const pagina = ref(1);
+const carregando = ref(false);
+const acabou = ref(false);
+
+// função para carregar imagens do backend
+async function carregarImagens() {
+  if (carregando.value || acabou.value) return;
+  carregando.value = true;
+
+  try {
+    // sua API já configurada no Axios
+    const response = await axios.get(`media/images/?descricao=1&page=${pagina.value}`);
+
+    const novosDados = response.data.results || response.data;
+
+    if (novosDados.length === 0) {
+      acabou.value = true;
+    } else {
+      imagens.value.push(...novosDados);
+      pagina.value++;
+    }
+  } catch (err) {
+    console.error("Erro ao carregar imagens:", err);
+  } finally {
+    carregando.value = false;
+  }
+}
+// infinite scroll
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 300
+  ) {
+    carregarImagens();
+  }
 });
 
-// Função para gerar a URL real das imagens
-function createUrlImage(src: string): string {
-  return imagens[`/src/assets/imagens/${src}`];
-}
-
-// Lista de bolos e doces
-const produtos = ref([
-  { id: 1, nome: "Bolo de Brigadeiro", img: "bolo-brigadeiro.png" },
-  { id: 2, nome: "Bolo de Casamento", img: "bolo-casamento.png" },
-  { id: 3, nome: "Bolo Coração", img: "bolo-coracao.png" },
-  { id: 4, nome: "Bolo Florido", img: "bolo-florido.png" },
-  { id: 5, nome: "Bolo de Frutas Vermelhas", img: "bolo-frutas-vermelhas.png" },
-  { id: 6, nome: "Bolo de Frutas", img: "bolo-frutas.png" },
-  { id: 7, nome: "Bolo de Morango com Chocolate", img: "bolo-morango-chocolate.png" },
-  { id: 8, nome: "Bolo de Pistache", img: "bolo-pistache.png" },
-  { id: 9, nome: "Bolo Rosa", img: "bolo-rosa.png" },
-  { id: 10, nome: "Bolo 3 Camadas", img: "bolo-3-camadas.png" },
-  { id: 11, nome: "Bolo 4 Camadas", img: "bolo-4-camadas.png" },
-  { id: 12, nome: "Doces de Casamento", img: "doces-casamento.png" },
-]);
+onMounted(() => {
+  carregarImagens();
+});
 </script>
 
 <template>
   <div class="masonry">
-    <div class="item" v-for="(produto, index) in produtos" :key="index">
-      <img :src="createUrlImage(produto.img)" :alt="produto.nome" />
-      <!-- <span class="legenda">{{ produto.nome }}</span> -->
+    <div class="item" v-for="img in imagens" :key="img.attachment_key">
+      <img :src="img.url" :alt="img.description || 'imagem'" />
     </div>
+
   </div>
 </template>
 
@@ -50,7 +66,19 @@ const produtos = ref([
   margin-bottom: 18px;
   display: inline-block;
   width: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: aparecer 0.6s ease forwards;
+    position: relative;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .item img {
@@ -58,21 +86,18 @@ const produtos = ref([
   height: auto;
   border-radius: 12px;
   display: block;
+  z-index: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  object-fit: cover;
+  position: relative;
 }
 
-.item:hover {
+/* hover agora aplicado na imagem */
+.item img:hover {
   transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.15);
 }
 
-/* Legenda abaixo das imagens */
-.legenda {
-  display: block;
-  margin-top: 8px;
-  font-family: "Inter", sans-serif;
-  color: white;
-  text-align: center;
-  font-size: 15px;
-}
 
 /* Responsividade */
 @media (max-width: 1200px) {
