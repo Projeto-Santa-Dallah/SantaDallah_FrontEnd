@@ -13,11 +13,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@mercadopago/sdk-js": "^0.0.3",
     "@passageidentity/passage-auth": "^0.1.0-beta.28",
     "@passageidentity/passage-elements": "^1.23.1",
     "@popperjs/core": "^2.11.8",
-    "axios": "^1.9.0",
+    "axios": "^1.13.1",
     "chart.js": "^4.5.0",
+    "leaflet": "^1.9.4",
+    "mercadopago": "^2.9.0",
     "passage": "^1.7.2",
     "pinia": "^3.0.1",
     "v-calendar": "^3.1.2",

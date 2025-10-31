@@ -15,8 +15,6 @@ export const useTemplateStore = defineStore('template', () => {
     { text: 'Orçamentos', link: '/orcamentos' },
     { text: 'Sobre', link: '/sobre' },
     { text: 'Ateliê', link: '/atelie' },
-    { text: 'Perfil', link: '/perfil' },
-    { text: 'Carrinho', link: '/carrinho' },
   ]
 
   // Menus do administrador (atualizados para o novo padrão de rotas)
