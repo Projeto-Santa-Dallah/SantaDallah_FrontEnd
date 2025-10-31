@@ -7,6 +7,7 @@
 <style scoped>
 .header {
   margin: 30px;
+  margin-left: 32vw;
   display: flex;
   justify-content: center;
   align-items: center;
