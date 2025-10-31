@@ -5,74 +5,109 @@ import { useRoute } from "vue-router";
 import { useProdutosStore } from "./produtos";
 import { useTamanhoStore } from "./tamanhos";
 import { useCategoriaStore } from "./categorias";
-import { usePedidosStore } from "./pedidos"; // import da store de pedidos
+import { usePedidosStore } from "./pedidos";
 
 export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
   const route = useRoute();
 
-  // outras stores
   const produtosStore = useProdutosStore();
   const tamanhosStore = useTamanhoStore();
   const categoriasStore = useCategoriaStore();
   const pedidosStore = usePedidosStore();
 
-  // estado
-  const filtroSelecionado = ref(null);
+  const filtroSelecionado = ref("todos");
   const filtros = ref([]);
-
-  // 🔹 ref de loading só pra você ver quando está puxando
   const isLoading = ref(false);
 
-  // quando rota mudar, define filtros iniciais
+  // mapeamento para os filtros fixos
+  const mapFiltro = {
+    Bolos: ["Bolo Decorado", "Bolo Vulcão", "Bolo vovó Dallah"],
+    Tortas: ["Torta"],
+    Brigadeiros: ["Brigadeiro"]
+  };
+
+  const filtrosDesejados = ["Bolos", "Tortas", "Brigadeiros"];
+
   watch(
     () => route.path,
     async (novaRota) => {
-      filtroSelecionado.value = null;
+      filtroSelecionado.value = "todos";
+      isLoading.value = true;
 
-      if (novaRota === "/admin/produtos" || novaRota === "/admin/tamanhos") {
-        isLoading.value = true;
+      if (novaRota === "/produtos") {
+        if (!categoriasStore.categorias.length) {
+          await categoriasStore.getCategorias();
+        }
+
+        // filtra e mapeia categorias para os filtros fixos
+        const filtrosMapeados = filtrosDesejados
+          .map(filtro => {
+            const existe = categoriasStore.categorias.some(c =>
+              mapFiltro[filtro].includes(c.nome)
+            );
+            if (existe) {
+              return { titulo: filtro, value: filtro };
+            }
+            return null;
+          })
+          .filter(Boolean);
+
+        filtros.value = [{ titulo: "Todos", value: "todos" }, ...filtrosMapeados];
+      }
+      else if (novaRota === "/admin/produtos" || novaRota === "/admin/tamanhos") {
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
         }
         filtros.value = [
           { titulo: "Todos", value: "todos" },
-          ...categoriasStore.categorias.map((c) => ({
+          ...categoriasStore.categorias.map(c => ({
             titulo: c.nome,
-            value: c.id,
-          })),
+            value: c.id
+          }))
         ];
-        isLoading.value = false;
-      } else if (novaRota === "/admin/categorias") {
+      }
+      else if (novaRota === "/admin/categorias" || novaRota === "/admin/orcamento") {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
-      } else if (novaRota === "/admin/pedidos") {
+      }
+      else if (novaRota === "/admin/pedidos") {
         filtros.value = [
           { titulo: "Todos", value: "0" },
           { titulo: "Carrinho", value: "1" },
           { titulo: "Realizado", value: "2" },
           { titulo: "Pago", value: "3" },
-          { titulo: "Entregue", value: "4" },
+          { titulo: "Entregue", value: "4" }
         ];
-      } else if (novaRota === "/admin/orcamento") {
-        filtros.value = [{ titulo: "Todos", value: "todos" }];
-      } else {
+      }
+      else {
         filtros.value = [];
       }
+
+      isLoading.value = false;
     },
     { immediate: true }
   );
 
-  // aplicar filtro
   const selecionarFiltro = async (value) => {
     filtroSelecionado.value = value;
     isLoading.value = true;
 
-    if (route.path === "/admin/produtos") {
-      const params = value === "todos" ? {} : { categoria__id: value };
+    let params = {};
+    if (value !== "todos") {
+      if (route.path === "/produtos") {
+        // envia array de nomes reais para o backend
+        params = {
+          categoria_nome: mapFiltro[value] // ex: ["Bolo Decorado", "Bolo Vulcão", "Bolo vovó Dallah"]
+        };
+      } else {
+        params = { categoria__id: value };
+      }
+    }
+
+    if (route.path === "/produtos" || route.path === "/admin/produtos") {
       await produtosStore.carregarProdutos(params);
     }
 
     if (route.path === "/admin/tamanhos") {
-      const params = value === "todos" ? {} : { categoria__id: value };
       await tamanhosStore.getTamanhos(params);
     }
 
@@ -81,8 +116,8 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     }
 
     if (route.path === "/admin/pedidos") {
-      const params = value === "todos" ? {} : { status: value };
-      await pedidosStore.carregarPedidos(params);
+      const statusParam = value === "todos" ? {} : { status: value };
+      await pedidosStore.carregarPedidos(statusParam);
     }
 
     isLoading.value = false;
@@ -93,6 +128,6 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     filtros,
     filtroSelecionado,
     selecionarFiltro,
-    isLoading, // 🔹 expõe pra usar em qualquer componente
+    isLoading,
   };
 });
