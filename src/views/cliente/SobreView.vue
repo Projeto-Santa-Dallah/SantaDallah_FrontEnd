@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 const form = ref({
-  tefefone: '',
+  telefone: '',
   nome: '',
   user_email: '',
   mensagem: ''
@@ -13,6 +15,71 @@ const sucesso = ref('')
 const error = ref('')
 const popup = ref(false)
 const validacao = ref(false)
+
+const rua = ref("")
+const numero = ref("")
+const latitude = ref(null)
+const longitude = ref(null)
+
+// esse icone "iconSantaDallah" é o icone da localização do santadallah q aparece no mapa.
+const iconSantaDallah = L.divIcon({
+  html: `
+    <div style="
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #191645;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    ">
+      <img src="/imagens/santaDallah.jpg" style="
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      "/>
+    </div>
+  `,
+  className: '',
+  iconSize: [60, 60],
+  iconAnchor: [30, 60]
+})
+
+// esse icone "casaUsuario" é o icone da localização da casa do usuario q aparece no mapa.
+const casaUsuario = L.divIcon({
+  html: `
+    <div style="
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    ">
+      <img src="/imagens/casaUsuario.jpg" style="
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      "/>
+    </div>
+  `,
+  className: '', // remove estilos padrão do Leaflet
+  iconSize: [60, 60],
+  iconAnchor: [30, 60]
+})
+
+onMounted(() => {
+  // Cria o mapa centralizado na Santa Dallah
+  window.map = L.map('map').setView([-26.2925984, -48.8486605], 16)
+ 
+  // Adiciona o mapa base
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a> | <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(window.map);
+
+  // Adiciona o marcador fixo da Santa Dallah logo ao iniciar
+  L.marker([-26.2925984, -48.8486605], { icon: iconSantaDallah }).addTo(window.map)
+})
+
 const enviarEmail = async () => {
   try {
     const response = await axios.post('/send-email/', form.value)
@@ -28,6 +95,39 @@ const enviarEmail = async () => {
     error.value = error.response.data || 'Erro ao comunicar servidor'
     console.log('Erro:', error.value)
     sucesso.value = ''
+  }
+}
+
+// Essa função é a api de transformar a rua e o numero da casa em coordenadas(nessa função os icones da localização certa ja aparecem no mapa)
+async function buscarCoordenadas() {
+  if (!rua.value || !numero.value) return
+  
+  // esse endereco é oq o usuario coloca e dai ele transforma com base nele
+  const endereco = `${rua.value}, ${numero.value}, Joinville, SC`
+
+  // aqui é a api q faz essa transformação
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`
+  const response = await fetch(url)
+  const data = await response.json()
+  if (data.length > 0) {
+    latitude.value = parseFloat(data[0].lat)
+    longitude.value = parseFloat(data[0].lon)
+
+    // esse marker Dallah é a localização do dallah
+    var markerDallah = L.marker([-26.2925984, -48.8486605], {icon: iconSantaDallah}).addTo(window.map);
+
+    // esse marker é a localização da casa do usuario
+    var marker = L.marker([latitude.value, longitude.value], {icon: casaUsuario}).addTo(window.map);
+
+    // quando vc coloca uma localização o mapa ele se move para o lugar onde vc colocou a localização e é esse cara q faz isso 
+    window.map.setView([latitude.value, longitude.value], 16);
+    // essa linha como o propio nome ja diz, é a linha q liga a localização do dallah e da casa do usuario por uma linha
+    const linha = L.polyline([
+      markerDallah.getLatLng(),  // pega a posição do marcador Dallah
+      marker.getLatLng()         // pega a posição do marcador do usuário
+    ], { color: '#F8CFEF', weight: 4 }).addTo(window.map);
+  } else {
+    alert("Endereço não encontrado")
   }
 }
 </script>
@@ -117,7 +217,7 @@ const enviarEmail = async () => {
         <div class="DoisInput">
           <div>
             <label for="">Telefone:</label>
-            <input type="text" placeholder="Insira seu telefone" v-model="form.tefefone" >
+            <input type="text" placeholder="Insira seu telefone" v-model="form.telefone" >
           </div>
           <div>
             <label for="">Nome:</label>
@@ -140,6 +240,31 @@ const enviarEmail = async () => {
       </div>
     </div>
   </section>
+
+  <!-- Seção do Mapa -->
+  <section class="mapa-section">
+    <div>
+      <h2>Encontre-nos no Mapa</h2>
+      <span>Insira sua rua e número para ver a rota até a Santa Dallah!</span>
+      <ul class="mapa-inputs">
+        <li>
+          <p>Rua</p>
+          <input type="text" v-model="rua" class="mapa-input">
+        </li>
+        <li>
+          <p>Número</p>
+          <input type="number" v-model="numero" class="mapa-input">
+        </li>
+      </ul>
+      <button @click="buscarCoordenadas" class="mapa-button">Buscar coordenadas</button>
+      <p v-if="latitude && longitude" class="coordenadas">
+        Latitude: {{ latitude }}, Longitude: {{ longitude }}
+      </p>
+    </div>
+    <!-- essa div é o mapa -->
+    <div id="map" class="map-container"></div>
+  </section>
+
   <transition name="fade">
     <div class="sucesso-form" v-if="popup">
       <div class="popup">
@@ -280,8 +405,6 @@ form {
   padding: 30px;
 }
 
-
-
 .DoisInput input {
   width: 100%;
 }
@@ -355,7 +478,6 @@ input::placeholder, textarea::placeholder{
   font-weight: 500;
 }
 
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.4s ease;
@@ -410,4 +532,73 @@ input::placeholder, textarea::placeholder{
   justify-content: end;
   gap: 10px;
 }
+
+/* Estilos para a seção do mapa */
+.mapa-section {
+  display: flex;
+  width: 70%;
+  margin: auto;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25vh;
+  flex-direction: row-reverse; /* Inverte a ordem para mapa à esquerda, texto à direita */
+}
+
+.mapa-section div {
+  width: 50%;
+}
+
+.mapa-inputs {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.mapa-inputs li {
+  margin-bottom: 15px;
+}
+
+.mapa-inputs p {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.mapa-input {
+  width: 100%;
+  height: 35px;
+  border-radius: 25px;
+  border: 1px solid #BF99C8;
+  padding-left: 10px;
+  font-size: 14px;
+}
+
+.mapa-input:focus {
+  outline: 1px solid #BF99C8;
+}
+
+.mapa-button {
+  width: 100%;
+  height: 35px;
+  font-size: 16px;
+  border-radius: 25px;
+  color: white;
+  background-color: #BF99C8;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.coordenadas {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.map-container {
+  height: 400px;
+  width: 100%;
+  margin: 30px;
+}
+
 </style>
