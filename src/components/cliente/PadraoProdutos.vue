@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import SlideComponent from './SlideComponent.vue'
 import ProdutosService from '@/service/produtos'
 import LoadingComponent from '@/components/carregamento/LoadingComponent.vue'
+import ProdutosHeader from './ProdutosHeader.vue'
 
 const produtos = ref([])
 const carregando = ref(true) // Adicionado para estado de carregamento
@@ -38,8 +39,7 @@ onMounted(async () => {
 <template>
   <div v-if="carregando" class="carregando">
     <LoadingComponent/>
-  </div>
-
+  </div> 
   <div v-else class="produtos">
     <div v-for="p in produtos" :key="p.id" class="produto">
       <SlideComponent

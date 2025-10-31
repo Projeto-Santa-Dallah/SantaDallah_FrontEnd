@@ -277,7 +277,7 @@ onMounted(() => {
   opacity: 0.85;
   padding: 50px 30px;
   text-align: center;
-  height: 200px;
+  height: 180px;
 }
 
 .vueperslide--active {

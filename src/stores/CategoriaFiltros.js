@@ -54,7 +54,11 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
 
         filtros.value = [{ titulo: "Todos", value: "todos" }, ...filtrosMapeados];
       }
-      else if (novaRota === "/admin/produtos" || novaRota === "/admin/tamanhos") {
+
+      else if (
+        novaRota === "/admin/produtos" ||
+        novaRota === "/admin/tamanhos"
+      ) {
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
         }
@@ -66,9 +70,16 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
           }))
         ];
       }
-      else if (novaRota === "/admin/categorias" || novaRota === "/admin/orcamento") {
+
+      else if (
+        novaRota === "/admin/categorias" ||
+        novaRota === "/admin/orcamento" ||
+        novaRota === "/admin/orcamentos" ||   
+        novaRota === "/admin/clientes"         
+      ) {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
       }
+
       else if (novaRota === "/admin/pedidos") {
         filtros.value = [
           { titulo: "Todos", value: "0" },
@@ -78,6 +89,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
           { titulo: "Entregue", value: "4" }
         ];
       }
+
       else {
         filtros.value = [];
       }
@@ -94,10 +106,7 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     let params = {};
     if (value !== "todos") {
       if (route.path === "/produtos") {
-        // envia array de nomes reais para o backend
-        params = {
-          categoria_nome: mapFiltro[value] // ex: ["Bolo Decorado", "Bolo Vulcão", "Bolo vovó Dallah"]
-        };
+        params = { categoria_nome: mapFiltro[value] };
       } else {
         params = { categoria__id: value };
       }
