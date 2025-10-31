@@ -4,6 +4,8 @@ import axios from 'axios'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+
+
 const form = ref({
   telefone: '',
   nome: '',
@@ -135,7 +137,7 @@ async function buscarCoordenadas() {
 <template>
   <h1>Sobre nós</h1>
 
-  <section class="sobrehome">
+  <section class="sobrehome" v-motion-slide-visible-once-bottom :delay="300" :duration="500">
 
     <div>
       <div class="circulo-grande">
@@ -162,7 +164,7 @@ async function buscarCoordenadas() {
   </section>
 
 
-  <section>
+  <section v-motion-slide-visible-once-bottom :delay="300" :duration="400">
     <div>
       <h2>Entre em Contato</h2>
       <span>Se você tiver alguma dúvida, sugestão ou comentário, pode nos enviar uma mensagem. Sua opinião é muito

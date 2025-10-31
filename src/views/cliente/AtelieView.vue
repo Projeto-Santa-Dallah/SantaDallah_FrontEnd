@@ -46,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="masonry">
+  <div class="masonry" v-motion-slide-visible-once-bottom :delay="300" :duration="500">
     <div class="item" v-for="img in imagens" :key="img.attachment_key">
       <img :src="img.url" :alt="img.description || 'imagem'" />
     </div>

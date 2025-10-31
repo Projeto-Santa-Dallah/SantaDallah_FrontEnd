@@ -42,7 +42,7 @@ const useAuth = useAuthStore()
         <router-link to="/perfil" class="profile-link">
           <img :src="useAuth.user.foto
             ? useAuth.user.foto.url
-            : '/src/assets/imagens/usersemfoto.png'
+            : `src/assets/imagens/usersemfoto.png`
             " alt="foto usuario" />
           <span>{{ useAuth.user.name }}</span>
         </router-link>
