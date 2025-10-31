@@ -28,10 +28,20 @@ const router = createRouter({
           component: () => import('@/views/cliente/ProdutosView.vue'),
         },
         {
-          path: 'produto',
+          path: 'produto/:id',
           name: 'Produto',
           component: () => import('@/views/cliente/ProdutoView.vue'),
         },
+        {
+          path: 'pagamento',
+          name: 'Pagamento',
+          component: () => import('@/views/cliente/PagamentoView.vue'),
+        },
+        {
+          path: '/pagamento/success',
+          name: 'pagamentoAprovado',
+          component: () => import('../views/cliente/AprovadoView.vue')
+          },
         {
           path: 'orcamentos',
           name: 'Orçamentos',
