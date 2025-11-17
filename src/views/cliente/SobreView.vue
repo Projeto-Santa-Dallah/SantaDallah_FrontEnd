@@ -72,7 +72,7 @@ const casaUsuario = L.divIcon({
 onMounted(() => {
   // Cria o mapa centralizado na Santa Dallah
   window.map = L.map('map').setView([-26.2925984, -48.8486605], 16)
- 
+
   // Adiciona o mapa base
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://carto.com/">CARTO</a> | <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -103,7 +103,7 @@ const enviarEmail = async () => {
 // Essa função é a api de transformar a rua e o numero da casa em coordenadas(nessa função os icones da localização certa ja aparecem no mapa)
 async function buscarCoordenadas() {
   if (!rua.value || !numero.value) return
-  
+
   // esse endereco é oq o usuario coloca e dai ele transforma com base nele
   const endereco = `${rua.value}, ${numero.value}, Joinville, SC`
 
@@ -116,10 +116,10 @@ async function buscarCoordenadas() {
     longitude.value = parseFloat(data[0].lon)
 
     // esse marker Dallah é a localização do dallah
-    var markerDallah = L.marker([-26.2925984, -48.8486605], {icon: iconSantaDallah}).addTo(window.map);
+    var markerDallah = L.marker([-26.2925984, -48.8486605], { icon: iconSantaDallah }).addTo(window.map);
 
     // esse marker é a localização da casa do usuario
-    var marker = L.marker([latitude.value, longitude.value], {icon: casaUsuario}).addTo(window.map);
+    var marker = L.marker([latitude.value, longitude.value], { icon: casaUsuario }).addTo(window.map);
 
     // quando vc coloca uma localização o mapa ele se move para o lugar onde vc colocou a localização e é esse cara q faz isso 
     window.map.setView([latitude.value, longitude.value], 16);
@@ -203,14 +203,19 @@ async function buscarCoordenadas() {
 
       <hr>
       <div class="redesSociais">
-      <div >
-       <h3>Redes Sociais</h3></div>
-       
+        <div>
+          <h3>Redes Sociais</h3>
+        </div>
+
         <div class="iconsMidias">
-         <a href="https://api.whatsapp.com/send/?phone=554791706002&text&type=phone_number&app_absent=0" target="_blank"> <img src="/src/assets/imagens/whatsapp 5.svg" alt="" ></a>
-         <a href="https://www.instagram.com/santadallah/" target="_blank"><img src="/src/assets/imagens/instagram 6.svg" alt=""></a>
-         <a href="https://www.facebook.com/santadallah/" target="_blank"><img src="/src/assets/imagens/facebook(1) 1.svg" ></a>
-         <a href="https://www.tiktok.com/@santadallah" target="_blank" ><img src="/src/assets/imagens/tik-tok 1.svg" alt="" ></a>
+          <a href="https://api.whatsapp.com/send/?phone=554791706002&text&type=phone_number&app_absent=0"
+            target="_blank"> <img src="/src/assets/imagens/whatsapp 5.svg" alt=""></a>
+          <a href="https://www.instagram.com/santadallah/" target="_blank"><img
+              src="/src/assets/imagens/instagram 6.svg" alt=""></a>
+          <a href="https://www.facebook.com/santadallah/" target="_blank"><img
+              src="/src/assets/imagens/facebook(1) 1.svg"></a>
+          <a href="https://www.tiktok.com/@santadallah" target="_blank"><img src="/src/assets/imagens/tik-tok 1.svg"
+              alt=""></a>
         </div>
       </div>
     </div>
@@ -219,25 +224,25 @@ async function buscarCoordenadas() {
         <div class="DoisInput">
           <div>
             <label for="">Telefone:</label>
-            <input type="text" placeholder="Insira seu telefone" v-model="form.telefone" >
+            <input type="text" placeholder="Insira seu telefone" v-model="form.telefone">
           </div>
           <div>
             <label for="">Nome:</label>
-            <input type="text" placeholder="Insira seu nome" v-model="form.nome" >
+            <input type="text" placeholder="Insira seu nome" v-model="form.nome">
           </div>
 
         </div>
 
         <label for="">Email</label>
         <input type="email" placeholder="Insira seu email" v-model="form.user_email" required>
-         <span class="validacao-span" v-if="!form.user_email.trim()">Campo Obrigatório!</span>
+        <span class="validacao-span" v-if="!form.user_email.trim()">Campo Obrigatório!</span>
 
         <label for="">Feedback</label>
-        <textarea name="" id="" rows="6"  placeholder="Deixe uma mensagem" v-model="form.mensagem" required></textarea>
-          <span class="validacao-span" v-if="!form.mensagem.trim()">Campo Obrigatório!</span>
+        <textarea name="" id="" rows="6" placeholder="Deixe uma mensagem" v-model="form.mensagem" required></textarea>
+        <span class="validacao-span" v-if="!form.mensagem.trim()">Campo Obrigatório!</span>
         <button type="">Enviar</button>
       </form>
-        <div v-if="validacao" class="error-servidor">
+      <div v-if="validacao" class="error-servidor">
         <span>Erro ao enviar a mensagem. Servidor fora do ar!</span>
       </div>
     </div>
@@ -388,9 +393,9 @@ hr {
   gap: 20px;
 }
 
-.form{
+.form {
   display: flex;
-  justify-content:end;
+  justify-content: end;
   align-items: center;
 
 }
@@ -420,22 +425,22 @@ form input {
   padding-left: 10px;
 }
 
-textarea{
-   width: 100%;
+textarea {
+  width: 100%;
   border-radius: 25px;
   border: 1px solid #BF99C8;
   margin-bottom: 15px;
-   resize: none;
-   padding-left: 15px;
-   padding-top: 10px;
+  resize: none;
+  padding-left: 15px;
+  padding-top: 10px;
 }
 
-label{
+label {
   display: flex;
   width: 100%;
 }
 
-button{
+button {
   width: 25%;
   height: 10%;
   font-size: 16px;
@@ -448,10 +453,10 @@ button{
   font-weight: 600;
 }
 
-.sobrehome{
-height: 50vh;
-display: flex;
-align-items: center;
+.sobrehome {
+  height: 50vh;
+  display: flex;
+  align-items: center;
 }
 
 input:focus,
@@ -459,7 +464,8 @@ textarea:focus {
   outline: 1px solid #BF99C8;
 }
 
-input::placeholder, textarea::placeholder{
+input::placeholder,
+textarea::placeholder {
   padding: 10px;
   font-size: 14px;
 }
@@ -469,13 +475,14 @@ input::placeholder, textarea::placeholder{
   color: #da1a1a;
   font-size: 12px;
 }
-.error-servidor{
+
+.error-servidor {
   width: 100%;
- text-align: center;
+  text-align: center;
   padding: 10px;
 }
 
-.error-servidor span{
+.error-servidor span {
   font-size: 14px;
   font-weight: 500;
 }
@@ -485,7 +492,11 @@ input::placeholder, textarea::placeholder{
   transition: opacity 0.4s ease;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active em versões mais antigas */ {
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active em versões mais antigas */
+  {
   opacity: 0;
 }
 
@@ -498,7 +509,7 @@ input::placeholder, textarea::placeholder{
   flex-direction: column;
   gap: 20px;
   border-radius: 25px;
-  
+
 }
 
 .popup img {
@@ -517,19 +528,19 @@ input::placeholder, textarea::placeholder{
   z-index: 1000;
 }
 
-.MidiasRedondo{
+.MidiasRedondo {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.redesSociais{
+.redesSociais {
   width: 100%;
   display: flex;
   flex-direction: row;
 }
 
-.iconsMidias{
+.iconsMidias {
   display: flex;
   justify-content: end;
   gap: 10px;
@@ -543,7 +554,8 @@ input::placeholder, textarea::placeholder{
   align-items: center;
   justify-content: space-between;
   margin-bottom: 25vh;
-  flex-direction: row-reverse; /* Inverte a ordem para mapa à esquerda, texto à direita */
+  flex-direction: row-reverse;
+  /* Inverte a ordem para mapa à esquerda, texto à direita */
 }
 
 .mapa-section div {
@@ -603,4 +615,89 @@ input::placeholder, textarea::placeholder{
   margin: 30px;
 }
 
+@media (max-width: 1300px) {
+  section {
+    flex-direction: column;
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  .sobrehome {
+    height: auto;
+  }
+
+  .sobrehome span {
+    text-align: justify;
+  }
+
+  section div {
+    width: 100%;
+  }
+
+  span {
+    display: block;
+  }
+
+  h1,
+  h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .circulo-grande {
+    width: 270px;
+    height: 270px;
+    margin: 30px 0 60px 0;
+  }
+
+  .sobrehome h3 {
+    display: none;
+  }
+
+  .fotoGrande {
+    width: 230px;
+    height: 230px;
+  }
+
+  .circulo-pequeno {
+    width: 190px;
+    height: 190px;
+  }
+
+  .FotoPequena {
+    width: 160px;
+    height: 160px;
+  }
+
+  .MidiasRedondo {
+    border-radius: 50%;
+  }
+
+  hr {
+    margin-top: 30px;
+    color: #D9D9D9;
+  }
+
+  .redesSociais {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .form {
+    margin: 50px 0 30px 0;
+    justify-content: center;
+  }
+
+  .mapa-section {
+    width: 100%;
+    margin-bottom: 20px;
+    flex-direction: column;
+  }
+
+  .mapa-section div {
+    width: 90%;
+  }
+
+}
 </style>
