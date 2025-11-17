@@ -18,7 +18,7 @@
     "@passageidentity/passage-elements": "^1.23.1",
     "@popperjs/core": "^2.11.8",
     "@vueuse/motion": "^3.0.3",
-    "axios": "^1.9.0",
+    "axios": "^1.13.1",
     "chart.js": "^4.5.0",
     "leaflet": "^1.9.4",
     "mercadopago": "^2.9.0",
