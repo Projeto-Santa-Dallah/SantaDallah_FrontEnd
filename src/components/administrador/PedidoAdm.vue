@@ -27,7 +27,7 @@ onMounted(() => {
     <div class="produtos-pedido">
       <span class="titulo">Produtos:</span>
       <span class="produtos" v-for="(item, i) in itens" :key="item.id">
-        {{ item.produto }}<span v-if="i < itens.length-1"> – </span>
+        {{ item.produto_nome }}<span v-if="i < itens.length-1"> – </span>
       </span>
     </div>
         <span class="detalhes" @click="$emit('open', id)">ver detalhes</span>

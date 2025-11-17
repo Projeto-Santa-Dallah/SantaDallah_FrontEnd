@@ -85,8 +85,8 @@ function scrollParaOrcamento() {
 
 <template>
   <div class="sombra">
-    <h1 class="frase">Torne seu momento ainda mais especial</h1>
-    <button @click="scrollParaOrcamento">Faça seu orçamento</button>
+    <h1 class="frase" v-motion-slide-visible-once-bottom :delay="300" :duration="500">Torne seu momento ainda mais especial</h1>
+    <button @click="scrollParaOrcamento" v-motion-slide-visible-once-bottom :delay="600" :duration="500">Faça seu orçamento</button>
   </div>
   <section class="fotosContent">
     <div class="fotos">
@@ -104,7 +104,7 @@ function scrollParaOrcamento() {
   </section>
 
   <section class="orcamento" id="orcamento">
-    <div class="dadosOrcamento">
+    <div class="dadosOrcamento" v-motion-slide-visible-once-bottom :delay="400" :duration="550">
       <div class="orcamento-div1"><img src="/src/assets/imagens/fotoorcamento1.png" alt="" /></div>
       <div class="orcamento-div2">
         <div class="titulo">
@@ -180,7 +180,7 @@ function scrollParaOrcamento() {
       </div>
     </div>
     <div>
-      <div class="localOrcamento">
+      <div class="localOrcamento" v-motion-slide-visible-once-bottom :delay="400" :duration="550">
         <div class="orcamento-div2">
           <div class="titulo">
             <img src="/src/assets/imagens/local.svg" alt="" />
