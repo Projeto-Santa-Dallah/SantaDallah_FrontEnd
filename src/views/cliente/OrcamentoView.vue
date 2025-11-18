@@ -80,13 +80,16 @@ function scrollParaOrcamento() {
   const secao = document.getElementById('orcamento')
   if (secao) {
     secao.scrollIntoView({ behavior: 'smooth' })
-  }}
+  }
+}
 </script>
 
 <template>
   <div class="sombra">
-    <h1 class="frase" v-motion-slide-visible-once-bottom :delay="300" :duration="500">Torne seu momento ainda mais especial</h1>
-    <button @click="scrollParaOrcamento" v-motion-slide-visible-once-bottom :delay="600" :duration="500">Faça seu orçamento</button>
+    <h1 class="frase" v-motion-slide-visible-once-bottom :delay="300" :duration="500">Torne seu momento ainda mais
+      especial</h1>
+    <button @click="scrollParaOrcamento" v-motion-slide-visible-once-bottom :delay="600" :duration="500">Faça seu
+      orçamento</button>
   </div>
   <section class="fotosContent">
     <div class="fotos">
@@ -136,15 +139,9 @@ function scrollParaOrcamento() {
             <p class="pergunta">Serão servidas bebidas alcoólicas além dos docinhos?</p>
 
             <div class="radio-group">
-              <label
-                ><input
-                  type="radio"
-                  name="alcool"
-                  v-model="orcamento.bebidaAlcoolica"
-                  :checked="orcamento.bebidaAlcoolica"
-                />
-                Sim</label
-              >
+              <label><input type="radio" name="alcool" v-model="orcamento.bebidaAlcoolica"
+                  :checked="orcamento.bebidaAlcoolica" />
+                Sim</label>
               <label><input type="radio" name="alcool" /> Não</label>
             </div>
           </div>
@@ -152,15 +149,9 @@ function scrollParaOrcamento() {
             <p class="pergunta">Será servido sobremesa além dos docinhos?</p>
 
             <div class="radio-group">
-              <label
-                ><input
-                  type="radio"
-                  name="sobremesa"
-                  v-model="orcamento.sobremesa"
-                  :checked="orcamento.sobremesa"
-                />
-                Sim</label
-              >
+              <label><input type="radio" name="sobremesa" v-model="orcamento.sobremesa"
+                  :checked="orcamento.sobremesa" />
+                Sim</label>
               <label><input type="radio" name="sobremesa" /> Não</label>
             </div>
           </div>
@@ -191,14 +182,8 @@ function scrollParaOrcamento() {
             <div class="localInputs">
               <div class="flex flexmenor">
                 <label>Cep:</label>
-                <input
-                  type="text"
-                  placeholder="________"
-                  required
-                  v-model="local.cep"
-                  maxlength="8"
-                  @blur="buscarCep(local.cep)"
-                />
+                <input type="text" placeholder="________" required v-model="local.cep" maxlength="8"
+                  @blur="buscarCep(local.cep)" />
                 <p v-if="erro" class="mensagem-erro">{{ erro }}</p>
               </div>
               <div class="flex flexmaior">
@@ -213,12 +198,7 @@ function scrollParaOrcamento() {
               </div>
               <div class="flex flexmaior">
                 <label>Rua:</label>
-                <input
-                  type="text"
-                  placeholder="Ex.: Carlos da Oliveira"
-                  required
-                  v-model="local.rua"
-                />
+                <input type="text" placeholder="Ex.: Carlos da Oliveira" required v-model="local.rua" />
               </div>
             </div>
             <div class="localInputs">
@@ -287,8 +267,8 @@ function scrollParaOrcamento() {
   animation: fadeIn 0.3s ease;
 }
 
-.popup img{
-    width: 30%;
+.popup img {
+  width: 30%;
 }
 
 /* botão */
@@ -600,5 +580,122 @@ input[type='number'] {
 .titulo img {
   width: 30px;
   height: 30px;
+}
+
+@media (max-width: 1500px) {
+
+  .orcamento {
+    width: 90%;
+  }
+
+}
+
+@media (max-width: 1300px) {
+  .orcamento-div1 img {
+    display: none;
+  }
+
+  .dadosOrcamento,
+  .localOrcamento {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 30px 0 60px 0;
+  }
+
+  .linha,
+  .localInputs {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .orcamento-div2 {
+    width: 100%;
+  }
+
+  .form-orcamento {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .localInputs .flexmenor {
+    width: 100%;
+  }
+
+  .localInputs .flexmaior {
+    width: 100%;
+  }
+
+  .linha input {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 900px) {
+  .fotosContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+  }
+
+  .titulo {
+    margin-bottom: 40px;
+  }
+
+  .fotos {
+    display: none;
+  }
+
+  .fotoflex {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  .fotomenor {
+    height: 50%;
+    display: none;
+  }
+
+  .fotorow {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .fotorow div {
+    width: 100%;
+    height: 100%;
+  }
+
+  .fotosContent img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .frase {
+    width: 70vw;
+    font-size: 28px;
+  }
+
+  .orcamento {
+    margin-top: 60px;
+    width: 80%;
+  }
+
+  .popup {
+    max-width: 300px;
+  }
+
+  .popup h2 {
+    font-size: 20px;
+  }
+
 }
 </style>

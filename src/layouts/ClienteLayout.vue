@@ -5,7 +5,7 @@ import PadrãoFooter from '@/components/footer/PadrãoFooter.vue';
 </script>
 
 <template>
-  <HeaderPadrao />
+  <!-- <HeaderPadrao /> -->
  
   <div class="container">
   <RouterView />
