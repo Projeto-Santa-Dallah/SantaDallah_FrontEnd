@@ -4,7 +4,7 @@
 
 <template>
     <div>
-       <div>
+       <div class="logo">
          <router-link to="/">
            <img src="/src/assets/imagens/logobranca.png" alt="">
          </router-link>
@@ -24,5 +24,21 @@
  display: flex;
  align-items: center;
  gap: 10px;
+}
+
+@media (max-width: 1300px){
+  .logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-slogan img{
+    display: none;
+  }
+
+  .footer-slogan{
+    text-align: center;
+  }
 }
 </style>

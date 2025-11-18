@@ -49,4 +49,50 @@ hr {
   display: flex;
   justify-content: center;
 }
+
+@media (max-width: 1300px) {
+
+  footer {
+
+    height: auto;
+     padding: 40px 60px 40px 60px;
+  }
+
+
+
+  footer section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 80px;
+
+  }
+
+  footer section .footer-info{
+    text-align: center;
+  }
+
+  .footer-info{
+    margin: 40px 0 0 0;
+  }
+
+
+  .footer-info {
+    flex-direction: column;
+    display: flex;
+    gap: 15px;
+  }
+
+  footer section{
+    margin-bottom: 40px;
+  }
+
+  hr{
+    width: 100%;
+  }
+
+  .footer-direitos{
+    text-align: center;
+  }
+}
 </style>
