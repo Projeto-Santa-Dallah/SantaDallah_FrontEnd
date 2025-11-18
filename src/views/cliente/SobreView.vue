@@ -699,5 +699,53 @@ textarea::placeholder {
     width: 90%;
   }
 
+ 
+
+form {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50px;
+  padding: 10px;
+}
+
+.DoisInput input {
+  width: 100%;
+}
+
+form input {
+  width: 100%;
+  height: 35px;
+  border-radius: 25px;
+  border: 1px solid #BF99C8;
+  margin-bottom: 15px;
+  padding-left: 0px;
+}
+
+.DoisInput {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0px;
+}
+
+button {
+  width: 100px;
+  height: 35px;
+  font-size: 16px;
+  border-radius: 50px;
+  color: white;
+  background-color: #BF99C8;
+  cursor: pointer;
+  border: none;
+  margin-top: 40px;
+  font-weight: 600;
+}
+
+
 }
 </style>
