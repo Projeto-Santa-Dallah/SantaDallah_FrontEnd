@@ -44,7 +44,7 @@ const useAuth = useAuthStore()
             ? useAuth.user.foto.url
             : '/src/assets/imagens/usersemfoto.png'
             " alt="foto usuario" />
-          <span>{{ useAuth.user.name }}</span>
+          <span class="name-user">{{ useAuth.user.name }}</span>
         </router-link>
 
         <!-- Foto do usuário com dropdown -->
@@ -159,12 +159,15 @@ const useAuth = useAuthStore()
 
   .acoes-usuarios {
     width: auto;
-    height: auto
+    height: 
   }
   .login-mobile{
   display: block;
 }
 .login{
+  display: none;
+}
+.name-user{
   display: none;
 }
 }

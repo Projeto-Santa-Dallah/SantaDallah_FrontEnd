@@ -142,6 +142,7 @@ span {
   .tudo {
     width: 160px;
     height: 340px;
+    padding: 10px;
   
   }
   .nome{

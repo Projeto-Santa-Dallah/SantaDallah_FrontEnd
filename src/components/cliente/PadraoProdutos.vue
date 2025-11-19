@@ -82,13 +82,20 @@ onMounted(async () => {
 @media (max-width: 470px) {
   .produto {
     width: 100%; 
-    max-width: 205px;
+    max-width: 195px;
     margin: 10px 0px;
   }
 }
 @media (max-width: 465px) {
   .produtos {
     gap: 0;
+  }
+}
+@media (max-width: 390px) {
+  .produto {
+    width: 100%; 
+    max-width: 188px;
+    margin: 10px 0px;
   }
 }
 </style>

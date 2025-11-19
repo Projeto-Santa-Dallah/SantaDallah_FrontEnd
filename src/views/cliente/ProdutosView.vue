@@ -58,6 +58,7 @@ main {
     border: none;
     cursor: pointer;
     font-weight: 600;
+    color: black;
   }
 
   /* Filtro vira painel mobile */
