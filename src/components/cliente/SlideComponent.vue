@@ -135,7 +135,7 @@ span {
     margin: 20px 0px;
   }
   .img img {
-    height: 80%;
+    height: 100%;
   }
 }
 @media (max-width: 465px) {
@@ -147,5 +147,14 @@ span {
   .nome{
     font-size: 14px;
   }
+  .preco{
+    font-size: 15px;
+  }
+  .img {
+  height: 200px;
+}
+.img img {
+  height: 200px;
+}
 }
 </style>
