@@ -19,74 +19,59 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
   const filtros = ref([]);
   const isLoading = ref(false);
 
-  // mapeamento para os filtros fixos
-  const mapFiltro = {
-    Bolos: ["Bolo Decorado", "Bolo Vulcão", "Bolo vovó Dallah"],
-    Tortas: ["Torta"],
-    Brigadeiros: ["Brigadeiro"]
-  };
-
-  const filtrosDesejados = ["Bolos", "Tortas", "Brigadeiros"];
-
   watch(
     () => route.path,
     async (novaRota) => {
       filtroSelecionado.value = "todos";
       isLoading.value = true;
 
-      if (novaRota === "/produtos") {
+      // 🔥 /produtos agora funciona EXATAMENTE como /admin/produtos
+      if (novaRota === "/produtos" || novaRota === "/admin/produtos") {
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
         }
 
-        // filtra e mapeia categorias para os filtros fixos
-        const filtrosMapeados = filtrosDesejados
-          .map(filtro => {
-            const existe = categoriasStore.categorias.some(c =>
-              mapFiltro[filtro].includes(c.nome)
-            );
-            if (existe) {
-              return { titulo: filtro, value: filtro };
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        filtros.value = [{ titulo: "Todos", value: "todos" }, ...filtrosMapeados];
+        filtros.value = [
+          { titulo: "Todos", value: "todos" },
+          ...categoriasStore.categorias.map((c) => ({
+            titulo: c.nome,
+            value: c.id,
+          })),
+        ];
       }
 
-      else if (
-        novaRota === "/admin/produtos" ||
-        novaRota === "/admin/tamanhos"
-      ) {
+      // filtros admin / tamanhos
+      else if (novaRota === "/admin/tamanhos") {
         if (!categoriasStore.categorias.length) {
           await categoriasStore.getCategorias();
         }
         filtros.value = [
           { titulo: "Todos", value: "todos" },
-          ...categoriasStore.categorias.map(c => ({
+          ...categoriasStore.categorias.map((c) => ({
             titulo: c.nome,
-            value: c.id
-          }))
+            value: c.id,
+          })),
         ];
       }
 
+      // páginas sem filtro
       else if (
         novaRota === "/admin/categorias" ||
         novaRota === "/admin/orcamento" ||
-        novaRota === "/admin/orcamentos" ||   
-        novaRota === "/admin/clientes"         
+        novaRota === "/admin/orcamentos" ||
+        novaRota === "/admin/clientes"
       ) {
         filtros.value = [{ titulo: "Todos", value: "todos" }];
       }
 
+      // filtros de pedidos
       else if (novaRota === "/admin/pedidos") {
         filtros.value = [
           { titulo: "Todos", value: "0" },
           { titulo: "Carrinho", value: "1" },
           { titulo: "Realizado", value: "2" },
           { titulo: "Pago", value: "3" },
-          { titulo: "Entregue", value: "4" }
+          { titulo: "Entregue", value: "4" },
         ];
       }
 
@@ -104,12 +89,9 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     isLoading.value = true;
 
     let params = {};
+
     if (value !== "todos") {
-      if (route.path === "/produtos") {
-        params = { categoria_nome: mapFiltro[value] };
-      } else {
-        params = { categoria__id: value };
-      }
+      params = { categoria__id: value };
     }
 
     if (route.path === "/produtos" || route.path === "/admin/produtos") {
@@ -130,7 +112,6 @@ export const useCategoriaFiltroStore = defineStore("categoriaFiltro", () => {
     }
 
     isLoading.value = false;
-    console.log("Filtro carregado! Loading:", isLoading.value);
   };
 
   return {

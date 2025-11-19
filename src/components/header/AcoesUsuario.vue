@@ -23,7 +23,7 @@ const useAuth = useAuthStore()
 
 <template>
   <div class="acoes-usuarios">
-    <div>
+    <div class="pesquisar">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M21 21L15.0001 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
@@ -42,7 +42,7 @@ const useAuth = useAuthStore()
         <router-link to="/perfil" class="profile-link">
           <img :src="useAuth.user.foto
             ? useAuth.user.foto.url
-            : `src/assets/imagens/usersemfoto.png`
+            : '/src/assets/imagens/usersemfoto.png'
             " alt="foto usuario" />
           <span>{{ useAuth.user.name }}</span>
         </router-link>
@@ -51,9 +51,16 @@ const useAuth = useAuthStore()
 
       </div>
 
-      <div class="login" v-else>
+      <div class="login" v-if="!isLoggedIn">
         <router-link to="/login" class="login-btn">Login</router-link>
       </div>
+      
+       <div class="login-mobile" v-if="!isLoggedIn">
+        <router-link to="/login" class="login-btn">      <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.0001 19C17.0001 17.6044 17.0001 16.9067 16.8279 16.3389C16.4401 15.0605 15.4397 14.06 14.1613 13.6722C13.5935 13.5 12.8957 13.5 11.5001 13.5H6.50013C5.10456 13.5 4.40678 13.5 3.83898 13.6722C2.56058 14.06 1.56016 15.0605 1.17236 16.3389C1.00012 16.9067 1.00012 17.6044 1.00012 19M13.5001 5.5C13.5001 7.98528 11.4854 10 9.00012 10C6.51484 10 4.50012 7.98528 4.50012 5.5C4.50012 3.01472 6.51484 1 9.00012 1C11.4854 1 13.5001 3.01472 13.5001 5.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></router-link>
+      </div>
+
     </div>
     <div>
       <RouterLink to="/carrinho" v-if="!isAdminRoute">
@@ -87,7 +94,8 @@ const useAuth = useAuthStore()
 .acoes-usuarios svg,
 
 .acoes-usuarios .login-btn {
-  display: block;            /* evita desalinhamento por linha */
+  display: block;
+  /* evita desalinhamento por linha */
 }
 
 .login .login-btn {
@@ -118,7 +126,7 @@ const useAuth = useAuthStore()
 
 .acoes-usuarios .perfil {
   display: flex;
-  align-items: center;      
+  align-items: center;
   gap: 10px;
   height: 100%;
 }
@@ -137,8 +145,27 @@ const useAuth = useAuthStore()
 
 .profile-link {
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 10px;
   text-decoration: none;
+}
+.login-mobile{
+  display: none;
+}
+@media (max-width: 700px) {
+  .pesquisar {
+    display: none;
+  }
+
+  .acoes-usuarios {
+    width: auto;
+    height: auto
+  }
+  .login-mobile{
+  display: block;
+}
+.login{
+  display: none;
+}
 }
 </style>

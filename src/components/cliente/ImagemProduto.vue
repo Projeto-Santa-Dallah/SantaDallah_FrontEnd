@@ -84,8 +84,7 @@ const imagemUrl = computed(() => {
 @media (max-width: 768px) {
   .img {
     width: auto;
-    height: auto;
-    padding: 20px;
+    height: 400px;
     margin: 0px 20px;
   }
 }

@@ -52,6 +52,7 @@ a{
   color: black;
 }
 .tudo {
+  height: 350px;
   border: 1px solid #d9d9d9;
   border-radius: 25px;
   padding: 30px 30px;
@@ -86,6 +87,7 @@ span {
   font-family: "Poppins", sans-serif;
 }
 .nome {
+  margin-top: 20px;
   height: 40px;
   font-size: 16px;
   font-weight: 500;
@@ -111,14 +113,48 @@ span {
 .estrelas span{
   margin-left: 5px;
 }
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .tudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 180px;
-    height: 100%;
+    height: 360px;
     padding: 15px;
   }
-  .img img {
-    height: 60%;
+  .img, .img img{
+    margin: 0;
+    align-items: flex-start;
   }
+  a{
+    width: 100%;
+  }
+  .produto{
+    height: 400px;
+    margin: 20px 0px;
+  }
+  .img img {
+    height: 100%;
+  }
+}
+@media (max-width: 465px) {
+  .tudo {
+    width: 160px;
+    height: 340px;
+  
+  }
+  .nome{
+    font-size: 14px;
+  }
+  .preco{
+    font-size: 15px;
+  }
+  .img {
+  height: 200px;
+}
+.img img {
+  height: 200px;
+}
 }
 </style>

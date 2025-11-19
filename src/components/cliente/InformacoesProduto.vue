@@ -317,8 +317,8 @@ function comprar() {
 
 @media (max-width: 768px) {
   .informacoes {
-    width: 100%;
-    padding: 30px;
+    width: 90%;
+    margin: 30px;
   }
 }
 </style>

@@ -154,19 +154,24 @@ onMounted(() => {
     <!-- Fundo com GIF -->
     <div class="fundo">
       <div class="img">
-        <img src="/imagens/home.gif" alt="Animação decorativa" />
+        <!-- <img src="/imagens/home.gif" alt="Animação decorativa" /> -->
+        <img src="/imagens/bolos.gif" alt="Animação decorativa" />
       </div>
     </div>
 
     <!-- Conteúdo -->
     <div class="itens">
       <div class="titulos">
-        <h1>
+        <h1 class="mobile-titulo">
+          Trazendo mais doçura e amor<br />
+          amor para o seu momento especial.
+        </h1>
+        <h1 class="desktop-titulo">
           Trazendo mais doçura e <br />
           amor para o seu <br />
           momento especial.
         </h1>
-        <h2>
+        <h2 class="detalhes">
           Sempre trabalhando e pensando com muito amor e <br />
           dedicação para levar o melhor para vocês.
         </h2>
@@ -209,192 +214,62 @@ onMounted(() => {
       </div>
     </div>
     <!-- Carrossel de feedbacks -->
-    <div class="carrossel">
-      <div class="titulo-feedbaacks"><h1>Feedbacks</h1></div>
-      <vueper-slides ref="slidesRef" class="no-shadow custom-slides" :visible-slides="3" :slide-ratio="1 / 4"
-        :dragging-distance="70" :slide-margin="20" :bullets="false" :arrows="false" :infinite="true" :center-mode="true"
-        @slide="atualizarPagina">
-        <vueper-slide v-for="(feedback, i) in feedbacks" :key="i">
-          <template #content>
-            <div class="feedback-slide">
-              <div class="user-estrelas">
-                <div class="user-depoimento"><img :src="createUrlImage(feedback.foto)" alt="Foto {{ feedback.nome }}"
-                    class="feedback-foto" /> <span class="feedback-nome">{{ feedback.nome }}</span>
-                </div> <div class="container-estrelas"><img src="/imagens/estrelas.png" alt="Foto estrelas"
-                      class="estrelas" /></div>
-              </div>
-              <p class="feedback-texto">{{ feedback.texto }}</p>
+    <!-- Carrossel de feedbacks -->
+<div class="carrossel">
+  <div class="titulo-feedbacks" style="
+    display: flex;
+    justify-content: center;
+">
+    <h1 class="feedbacks" style="
+    width: min-content;
+">Feedbacks</h1>
+  </div>
+  <vueper-slides ref="slidesRef" class="no-shadow custom-slides" :visible-slides="3" :slide-ratio="1 / 3"
+    :dragging-distance="50" :slide-margin="16" :bullets="false" :arrows="false" :infinite="true" :center-mode="true"
+    :breakpoints="{
+      1024: { visibleSlides: 2, slideRatio: 1 / 1.8, slideMargin: 14 },
+      700: { visibleSlides: 1, slideRatio: 1 / 1.05, slideMargin: 12 }
+    }" @slide="atualizarPagina">
+    <vueper-slide v-for="(feedback, i) in feedbacks" :key="i">
+      <template #content>
+        <div class="feedback-slide">
+          <div class="user-estrelas">
+            <div class="user-depoimento">
+              <img :src="createUrlImage(feedback.foto)" :alt="`Foto ${feedback.nome}`" class="feedback-foto" />
+              <span class="feedback-nome">{{ feedback.nome }}</span>
             </div>
-          </template>
-        </vueper-slide>
-      </vueper-slides>
-
-      <div class="bolinhas">
-        <div class="seta" @click="paginaAnterior"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15 6L9 12L15 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</div>
-        <div v-for="num in visibleNums" :key="num" class="bolinha" :class="{ ativo: currentSlide === (num - 1) }"
-          @click="goToSlideIndex(num - 1)">
-          {{ num }}
+            <div class="container-estrelas">
+              <img src="/imagens/estrelas.png" alt="Foto estrelas" class="estrelas" />
+            </div>
+          </div>
+          <p class="feedback-texto">{{ feedback.texto }}</p>
         </div>
-        <div class="seta" @click="proximaPagina"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9 18L15 12L9 6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</div>
-      </div>
+      </template>
+    </vueper-slide>
+  </vueper-slides>
+
+  <div class="bolinhas">
+    <div class="seta" @click="paginaAnterior">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 6L9 12L15 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
     </div>
+    <div v-for="num in visibleNums" :key="num" class="bolinha" :class="{ ativo: currentSlide === (num - 1) }"
+      @click="goToSlideIndex(num - 1)">
+      {{ num }}
+    </div>
+    <div class="seta" @click="proximaPagina">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+  </div>
+</div>
   </div>
 </template>
 
-
 <style scoped>
-.carrossel {
-  margin: 100px auto;
-  width: 90%;
-  padding: 40px;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Centraliza verticalmente */
-.vueperslides__track {
-  align-items: center;
-}
-
-/* Slides */
-.vueperslide {
-  background: #191645;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  color: #fff;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  transform: scale(0.9);
-  opacity: 0.85;
-  padding: 50px 30px;
-  text-align: center;
-  height: 180px;
-}
-
-.vueperslide--active {
-  transform: scale(1);
-  z-index: 2;
-  opacity: 1;
-}
-
-/* Texto dos feedbacks */
-.titulo-feedbaacks{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-}
-.titulo-feedbaacks h1{
-  padding-bottom: 50px;
-  font-size: 30px;
-  color: black;
-  font-weight: 510;
-}
-.feedback-slide {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-}
-
-.feedback-foto {
-  width: 40px;
-  height: 40px;
-  margin-right: 15px;
-  border-radius: 50%;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-.feedback-texto {
-  font-size: 15px;
-  line-height: 1.4;
-  color: #ffffff;
-  font-weight: 300;
-  margin: 0;
-  width: 100%;
-  text-align: justify;
-
-}
-
-.feedback-nome {
-  font-weight: 600;
-  font-size: 14px;
-  color: #ffffff;
-}
-
-.estrelas {
-  width: 100px;
-}
-
-.container-estrelas, .user-estrelas {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: flex-start;
-}
-
-/* Indicadores */
-.bolinhas {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 15px;
-  gap: 10px;
-}
-
-.bolinha {
-  width: 16px;
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #191645;
-  font-weight: 700;
-  font-size: 12px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  user-select: none;
-}
-
-.bolinha.ativo {
-  border-radius: 50%;
-  color: #fff;
-  background: #191645;
-  transform: scale(1.08);
-  box-shadow: 0 6px 18px rgba(25, 22, 69, 0.25);
-}
-
-/* Setas */
-.seta {
-    display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: #191645;
-  cursor: pointer;
-  user-select: none;
-  padding: 6px;
-  transition: color 0.15s;
-}
-
-.seta:hover {
-  color: #555;
-}
-
-
-/* Loading */
+/* ========== GERAL ========== */
 .loading {
   display: flex;
   position: fixed;
@@ -408,7 +283,6 @@ onMounted(() => {
   width: 5%;
 }
 
-/* Estrutura geral */
 .container-home {
   width: 100%;
   height: auto;
@@ -416,7 +290,6 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Fundo com gif */
 .fundo {
   width: 100%;
   position: absolute;
@@ -432,15 +305,14 @@ onMounted(() => {
 
 .fundo .img img {
   position: relative;
-  width: 80%;
+  width: 65%;
   height: auto;
   object-fit: contain;
   display: block;
   right: 0;
-  margin-left: 20%;
+  margin-left: 35%;
 }
 
-/* Conteúdo */
 .itens {
   height: 100vh;
   display: flex;
@@ -459,11 +331,20 @@ onMounted(() => {
 }
 
 .user-depoimento {
-  width: 100%;
+  width: 100% !important;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
-
+.container-estrelas {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.user-estrelas{
+  width: 100% !important;
+  }
 .depoimento img {
   width: 400px;
   padding-left: 40px;
@@ -482,7 +363,6 @@ onMounted(() => {
   font-weight: 600;
 }
 
-/* Títulos */
 h1 {
   margin-top: 0;
   color: #191645;
@@ -493,7 +373,6 @@ h2 {
   font-size: 16px;
 }
 
-/* Botão */
 button {
   display: flex;
   align-items: center;
@@ -512,4 +391,305 @@ button:hover {
   cursor: pointer;
   background-color: rgb(9, 7, 36);
 }
+
+.desktop-titulo {
+  display: block;
+}
+
+.mobile-titulo {
+  display: none;
+}
+
+/* ========== CARROSSEL ========== */
+.carrossel {
+  margin: 80px auto;
+  width: 92%;
+  max-width: 1200px;
+  padding: 24px 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.custom-slides,
+.custom-slides .vueperslides__wrap {
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+  max-height: 400px;
+}
+
+.custom-slides .vueperslides__track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+.vueperslide {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 560px;
+  margin: 0;
+  padding: 28px 20px;
+  background: #191645;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+  color: #fff;
+  text-align: center;
+  height: 400px;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  transform: scale(0.96);
+  opacity: 0.92;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vueperslide--active {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 2;
+}
+
+.feedback-slide {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feedback-foto {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+}
+
+.feedback-texto {
+  font-size: 18px;
+  line-height: 1.45;
+  color: #fff;
+  font-weight: 300;
+  margin: 0;
+  text-align: left;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+.feedback-nome {
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.estrelas {
+  width: 100px;
+  max-width: 30%;
+  height: auto;
+  object-fit: contain;
+}
+
+.bolinhas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.bolinha {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 700;
+}
+
+.bolinha.ativo {
+  background: #191645;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(25, 22, 69, 0.18);
+}
+
+.seta {
+  padding: 6px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  color: #191645;
+  transition: color 0.15s;
+}
+
+.seta:hover {
+  color: #555;
+}
+
+/* Overrides para biblioteca Vueper Slides */
+.vueperslides__track-inner,
+.vueperslides__parallax-wrapper,
+.vueperslides__parallax {
+  padding-bottom: 0 !important;
+  height: auto !important;
+}
+
+/* ========== MEDIA QUERIES ========== */
+@media (max-width: 700px) {
+  .container-home {
+    display: block;
+  }
+
+  .fundo {
+    position: relative;
+    margin-top: 84px;
+  }
+
+  .fundo .img img {
+    width: 120%;
+    margin-left: -20%;
+  }
+
+  .itens {
+    height: 100%;
+    padding: 80px 20px;
+    justify-content: center;
+  }
+
+  .titulos, .titulo-feedbacks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  h1 {
+    font-size: 16px;
+    width: max-content;
+  }
+
+  .detalhes,
+  .desktop-titulo {
+    display: none;
+  }
+
+  .mobile-titulo {
+    display: block;
+  }
+
+  button {
+    font-size: 16px;
+  }
+
+  .depoimento {
+    flex-direction: column;
+    padding: 20px 50px;
+  }
+
+  .depoimento img {
+    width: 80vw;
+    padding: 40px;
+  }
+
+  .texto-depoimento {
+    padding: 0px;
+  }
+
+  h2 {
+    font-size: 14px;
+  }
+
+  .carrossel {
+    margin: 28px auto;
+    width: 100%;
+    padding: 6px 0;
+    position: relative;
+  }
+
+  .custom-slides {
+    padding: 0 12px;
+  }
+
+  .custom-slides .vueperslides__track {
+    gap: 0 !important;
+  }
+
+  .vueperslide {
+    padding: 18px 14px !important;
+    max-width: 100% !important;
+    width: 80% !important;
+    height: 250px !important;
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    border-radius: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  .feedback-foto {
+    width: 32px;
+    height: 32px;
+  }
+
+  .feedback-texto {
+    font-size: 13px;
+  }
+.feedback-nome {
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  display: inline-block;
+  margin-left: 10px;
+}
+  .estrelas {
+    width: 68px;
+  }
+
+  .bolinhas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .bolinha {
+    display: none;
+  }
+
+  .seta {
+    position: absolute;
+    top: 210px;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    z-index: 11;
+  }
+
+  .seta:first-child {
+    left: 10px;
+  }
+
+  .seta:last-child {
+    right: 10px;
+  }
+
+  .vueperslides__parallax-wrapper {
+    padding-bottom: 0px !important;
+  }
+}
+.feedbacks{
+   font-size: 30px;
+   margin-bottom: 40px;
+  }
 </style>
