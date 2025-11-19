@@ -162,4 +162,11 @@ h2 {
 .loading img {
   width: 150px;
 }
+
+@media (max-width: 768px) {
+.pagamento-container {
+  min-height: 70vh;
+}
+
+}
 </style>

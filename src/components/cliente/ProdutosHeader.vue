@@ -19,4 +19,10 @@ h1 {
   color: #000000;
   font-size: 24px;
 }
+@media (max-width: 800px) {
+.header {
+  margin: 30px 0px;
+}
+}
+
 </style>

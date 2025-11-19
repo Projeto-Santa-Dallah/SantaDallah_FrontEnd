@@ -16,8 +16,6 @@ const CategoriaFiltrosStore = useCategoriaFiltroStore();
 </template>
 <style scoped>
 .filtros {
-  position: relative;
-  top:-105px;
   display: flex;
   flex-direction: column;
   width: 25vw;
@@ -25,15 +23,24 @@ const CategoriaFiltrosStore = useCategoriaFiltroStore();
   padding-left: 5vw;
 }
 
-.filtro-titulo {
-  border-bottom: 1px solid #d9d9d9;
-  margin-bottom: 5px;
+@media (max-width: 800px) {
+  .filtros {
+    width: 80%;
+    padding-left: 0px;
+    margin-top: 10px;
+    padding: 30px;
+  }
+    .filtro-mobile, .ativo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+  }
 }
-
-.subtitulo {
-  font-weight: 600;
-  padding-bottom: 10px;
-  color: #191645;
-  font-size: 16px;
-}
+  .filtro-mobile, .ativo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+  }
 </style>
