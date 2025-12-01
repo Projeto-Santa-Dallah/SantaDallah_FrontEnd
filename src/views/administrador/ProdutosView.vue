@@ -26,7 +26,7 @@ function closeProduto() {
         <ProdutosAdm v-else>
             <div class="produtos-header">
                 <div class="header">
-                    <h1 class="titulo-produtos">Produtos</h1><span> ({{ ProdutosStore.produtos.length }} encontrados)</span>
+                    <h1 class="titulo-produtos">Produtos</h1><span> (47 encontrados)</span>
                 </div>
             </div>
         </ProdutosAdm>

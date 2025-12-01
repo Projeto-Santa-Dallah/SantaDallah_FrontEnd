@@ -2,9 +2,11 @@
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useTemplateStore } from '@/stores/template/template';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
+
 
 // Verifica se a rota atual começa com '/admin'
 const isAdminRoute = route.path.startsWith('/admin')
@@ -24,7 +26,7 @@ const useAuth = useAuthStore()
 <template>
   <div class="acoes-usuarios">
     <div class="pesquisar">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg @click="router.push('/produtos')" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M21 21L15.0001 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
           stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -152,6 +154,9 @@ const useAuth = useAuthStore()
 .login-mobile{
   display: none;
 }
+.pesquisar{
+  cursor: pointer;
+}
 @media (max-width: 700px) {
   .pesquisar {
     display: none;
@@ -159,7 +164,6 @@ const useAuth = useAuthStore()
 
   .acoes-usuarios {
     width: auto;
-    height: 
   }
   .login-mobile{
   display: block;

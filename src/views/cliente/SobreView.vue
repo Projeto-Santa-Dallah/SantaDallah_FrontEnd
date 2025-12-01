@@ -4,26 +4,32 @@ import axios from 'axios'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-
-
+// ------------------------ FORM ------------------------
 const form = ref({
   telefone: '',
   nome: '',
   user_email: '',
   mensagem: ''
 })
-
+const estados = [
+  "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT",
+  "MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO",
+  "RR","SC","SP","SE","TO"
+]
 const sucesso = ref('')
 const error = ref('')
 const popup = ref(false)
 const validacao = ref(false)
 
+// ------------------------ CAMPOS DE ENDEREÇO ------------------------
 const rua = ref("")
 const numero = ref("")
+const cidade = ref("")
+const estado = ref("") // agora dinâmico
 const latitude = ref(null)
 const longitude = ref(null)
 
-// esse icone "iconSantaDallah" é o icone da localização do santadallah q aparece no mapa.
+// ------------------------ ÍCONES ------------------------
 const iconSantaDallah = L.divIcon({
   html: `
     <div style="
@@ -46,7 +52,6 @@ const iconSantaDallah = L.divIcon({
   iconAnchor: [30, 60]
 })
 
-// esse icone "casaUsuario" é o icone da localização da casa do usuario q aparece no mapa.
 const casaUsuario = L.divIcon({
   html: `
     <div style="
@@ -64,75 +69,83 @@ const casaUsuario = L.divIcon({
       "/>
     </div>
   `,
-  className: '', // remove estilos padrão do Leaflet
+  className: '',
   iconSize: [60, 60],
   iconAnchor: [30, 60]
 })
 
+// ------------------------ MAPA ------------------------
 onMounted(() => {
-  // Cria o mapa centralizado na Santa Dallah
   window.map = L.map('map').setView([-26.2925984, -48.8486605], 16)
 
-  // Adiciona o mapa base
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://carto.com/">CARTO</a> | <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(window.map);
 
-  // Adiciona o marcador fixo da Santa Dallah logo ao iniciar
   L.marker([-26.2925984, -48.8486605], { icon: iconSantaDallah }).addTo(window.map)
 })
 
+// ------------------------ ENVIO DE EMAIL ------------------------
 const enviarEmail = async () => {
   try {
     const response = await axios.post('/send-email/', form.value)
     sucesso.value = response.data.success || 'E-mail enviado com sucesso!'
     popup.value = true
     error.value = ''
-    setTimeout(() => {
-      popup.value = false
-    }, 2500)
-    form.value = { telefone: '', nome: '', user_email: '', mensagem: '' } // Limpa o formulário
+    setTimeout(() => popup.value = false, 2500)
+
+    form.value = { telefone: '', nome: '', user_email: '', mensagem: '' }
   } catch (error) {
     validacao.value = true
     error.value = error.response.data || 'Erro ao comunicar servidor'
-    console.log('Erro:', error.value)
     sucesso.value = ''
   }
 }
 
-// Essa função é a api de transformar a rua e o numero da casa em coordenadas(nessa função os icones da localização certa ja aparecem no mapa)
+// ------------------------ BUSCAR COORDENADAS ------------------------
 async function buscarCoordenadas() {
-  if (!rua.value || !numero.value) return
 
-  // esse endereco é oq o usuario coloca e dai ele transforma com base nele
-  const endereco = `${rua.value}, ${numero.value}, Joinville, SC`
+  if (!rua.value || !numero.value || !cidade.value || !estado.value) {
+    alert("Preencha rua, número, cidade e estado.")
+    return
+  }
 
-  // aqui é a api q faz essa transformação
+  const endereco = `${rua.value}, ${numero.value}, ${cidade.value}, ${estado.value}, Brasil`
+
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`
+
   const response = await fetch(url)
   const data = await response.json()
+
   if (data.length > 0) {
     latitude.value = parseFloat(data[0].lat)
     longitude.value = parseFloat(data[0].lon)
 
-    // esse marker Dallah é a localização do dallah
-    var markerDallah = L.marker([-26.2925984, -48.8486605], { icon: iconSantaDallah }).addTo(window.map);
+    // marcador fixo
+    const markerDallah = L.marker([-26.2925984, -48.8486605], {
+      icon: iconSantaDallah
+    }).addTo(window.map);
 
-    // esse marker é a localização da casa do usuario
-    var marker = L.marker([latitude.value, longitude.value], { icon: casaUsuario }).addTo(window.map);
+    // marcador do usuário
+    const markerCasa = L.marker([latitude.value, longitude.value], {
+      icon: casaUsuario
+    }).addTo(window.map);
 
-    // quando vc coloca uma localização o mapa ele se move para o lugar onde vc colocou a localização e é esse cara q faz isso 
+    // centraliza no ponto do usuário
     window.map.setView([latitude.value, longitude.value], 16);
-    // essa linha como o propio nome ja diz, é a linha q liga a localização do dallah e da casa do usuario por uma linha
-    const linha = L.polyline([
-      markerDallah.getLatLng(),  // pega a posição do marcador Dallah
-      marker.getLatLng()         // pega a posição do marcador do usuário
-    ], { color: '#F8CFEF', weight: 4 }).addTo(window.map);
+
+    // desenha linha
+    L.polyline(
+      [markerDallah.getLatLng(), markerCasa.getLatLng()],
+      { color: '#F8CFEF', weight: 4 }
+    ).addTo(window.map);
+
   } else {
     alert("Endereço não encontrado")
   }
 }
 </script>
+
 
 <template>
   <h1>Sobre nós</h1>
@@ -251,7 +264,7 @@ async function buscarCoordenadas() {
   <!-- Seção do Mapa -->
   <section class="mapa-section">
     <div>
-      <h2>Encontre-nos no Mapa</h2>
+      <h2 class="mapa-titulo">Encontre-nos no Mapa</h2>
       <span>Insira sua rua e número para ver a rota até a Santa Dallah!</span>
       <ul class="mapa-inputs">
         <li>
@@ -262,6 +275,19 @@ async function buscarCoordenadas() {
           <p>Número</p>
           <input type="number" v-model="numero" class="mapa-input">
         </li>
+        <li>
+        <p>Cidade</p>
+<input type="text" v-model="cidade" class="mapa-input">
+</li>
+ <li>
+        <p>Estado</p>
+        <select v-model="estado" class="mapa-input">
+          <option disabled value="">Selecione</option>
+          <option v-for="uf in estados" :key="uf" :value="uf">
+            {{ uf }}
+          </option>
+        </select>
+      </li>
       </ul>
       <button @click="buscarCoordenadas" class="mapa-button">Buscar coordenadas</button>
       <p v-if="latitude && longitude" class="coordenadas">
@@ -550,6 +576,7 @@ textarea::placeholder {
 .mapa-section {
   display: flex;
   width: 70%;
+  height: 100%;
   margin: auto;
   align-items: center;
   justify-content: space-between;
@@ -566,6 +593,7 @@ textarea::placeholder {
   list-style: none;
   padding: 0;
   margin: 15px 0;
+  width: 100%;
 }
 
 .mapa-inputs li {
@@ -584,6 +612,7 @@ textarea::placeholder {
   border: 1px solid #BF99C8;
   padding-left: 10px;
   font-size: 14px;
+  background-color: white;
 }
 
 .mapa-input:focus {
@@ -592,7 +621,7 @@ textarea::placeholder {
 
 .mapa-button {
   width: 100%;
-  height: 35px;
+  height: 40px;
   font-size: 16px;
   border-radius: 25px;
   color: white;
@@ -610,7 +639,7 @@ textarea::placeholder {
 }
 
 .map-container {
-  height: 400px;
+  height: 480px;
   width: 100%;
   margin: 30px;
 }
@@ -643,7 +672,10 @@ textarea::placeholder {
     font-size: 20px;
     text-align: center;
   }
-
+  
+.mapa-titulo {
+    margin-top:0 !important;
+  }
   .circulo-grande {
     width: 270px;
     height: 270px;
