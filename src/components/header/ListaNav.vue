@@ -83,7 +83,7 @@ const titulos = computed(() => {
 
 .nav-item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   font-size: 16px;
   text-decoration: none;
@@ -93,6 +93,7 @@ const titulos = computed(() => {
 
 .router-link {
   text-decoration: none;
+  width: max-content;
 }
 
 .router-link-exact-active .nav-item {

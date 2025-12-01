@@ -58,6 +58,11 @@ const router = createRouter({
           component: () => import('@/views/cliente/AtelieView.vue'),
         },
         {
+          path: 'boloPersonalizado',
+          name: 'BoloPersonalizado',
+          component: () => import('@/views/cliente/BoloPersonalizado.vue'),
+        },
+        {
           path: 'perfil',
           name: 'Perfil',
           component: () => import('@/views/cliente/PerfilView.vue'),
