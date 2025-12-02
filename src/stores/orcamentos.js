@@ -25,7 +25,7 @@ export const useOrcamentosStore = defineStore('orcamentos', () => {
     orcamentoDetalhado.value = await orcamentosService.carregarOrcamentoDetalhado(id)
   }
 
-  // SALVAR ORÇAMENTO (Criar ou Atualizar)
+
   async function salvarOrcamento(orcamento) {
     if (orcamento.id) {
       await orcamentosService.AtualizarOrcamento(orcamento)
@@ -33,7 +33,7 @@ export const useOrcamentosStore = defineStore('orcamentos', () => {
       orcamentos.value.splice(index, 1, orcamento)
     } else {
       const data = await orcamentosService.AdicionarOrcamento(orcamento)
-      orcamentos.value.splice(0, 0, data) // adiciona no início da lista
+      orcamentos.value.splice(0, 0, data) 
     }
   }
 
