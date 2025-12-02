@@ -1,14 +1,21 @@
 <script setup>
 import { ref } from 'vue'
 import { useViaCep } from '@/composables/viaCep'
-
+import { useOrcamentosStore } from '@/stores/orcamentos'
 const { endereco, buscarCep, carregando, erro } = useViaCep()
 import { watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+const auth = useAuthStore()
+
+
+const useOrcamento = useOrcamentosStore()
+
+
 
 // Atualiza o local sempre que o endereco mudar
 
 const orcamento = ref({
-  email: '',
+  email: auth.user.email,
   data: '',
   horario: '',
   qtdPessoas: Number,
@@ -69,11 +76,50 @@ function Calcular() {
   QtdBolo()
   aberto.value = true
 }
-function Enviar() {
-  orcamento.value = ''
-  local.value = ''
-  aberto.value = false
-  // funcao para enviar para o banco
+
+
+function montarPayload() {
+  return {
+    data: orcamento.value.data,
+    qtnPessoas: Number(orcamento.value.qtdPessoas),
+    local: local.value.cidade || '', // backend quer só string
+    bebidaAlcoolica: Boolean(orcamento.value.bebidaAlcoolica),
+    sobremesa: Boolean(orcamento.value.sobremesa),
+    usuario: auth.user.id, // objeto completo
+    foto: [] // por enquanto vazio
+  }
+}
+async function Enviar() {
+  try {
+    const payload = montarPayload()
+
+    await useOrcamento.salvarOrcamento(payload)
+
+    alert('Orçamento enviado com sucesso!')
+
+    orcamento.value = {
+      data: '',
+      horario: '',
+      qtdPessoas: '',
+      bebidaAlcoolica: false,
+      sobremesa: false,
+      foto: ''
+    }
+
+    local.value = {
+      cep: '',
+      cidade: '',
+      bairro: '',
+      rua: '',
+      numero: ''
+    }
+
+    aberto.value = false
+
+  } catch (e) {
+    console.error(e)
+    alert('Erro ao enviar orçamento.')
+  }
 }
 
 function scrollParaOrcamento() {

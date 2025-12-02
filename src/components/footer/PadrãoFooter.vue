@@ -50,7 +50,7 @@ hr {
   justify-content: center;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1000px) {
 
   footer {
 

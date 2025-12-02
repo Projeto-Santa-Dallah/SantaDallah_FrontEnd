@@ -1,36 +1,60 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-
 import AuthService from '../service/auth';
+
 const authService = new AuthService();
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref({});
-  const loggedIn = ref(false);
-  const authToken = localStorage.getItem('psg_auth_token');
+  const user = ref(JSON.parse(localStorage.getItem('psg_user')) || {});
+  const loggedIn = ref(!!localStorage.getItem('psg_auth_token'));
+
+  const authToken = ref(localStorage.getItem('psg_auth_token'));
 
   async function setToken(token) {
-    user.value = await authService.postUserToken(token);
+    localStorage.setItem('psg_auth_token', token);
+    authToken.value = token;
+
+
+    const loggedUser = await authService.postUserToken(token);
+
+    user.value = loggedUser;
+
+ 
+    localStorage.setItem('psg_user', JSON.stringify(loggedUser));
+
     loggedIn.value = true;
   }
 
   function unsetToken() {
+    localStorage.removeItem('psg_auth_token');
+    localStorage.removeItem('psg_user');
+
     user.value = {};
+    authToken.value = null;
     loggedIn.value = false;
-  
   }
 
   async function updateUser(newUserData) {
-    if(authToken){
-      console.log('foiii')
-    }
-    console.log('foiii')
-    const updatedUserData = await authService.updateUserData(user.value.id,newUserData,authToken);
+    if (!authToken.value) return;
+
+    const updatedUserData = await authService.updateUserData(
+      user.value.id,
+      newUserData,
+      authToken.value
+    );
+
     if (updatedUserData) {
-      user.value = updatedUserData; // Atualiza o estado com os dados novos
- 
+      user.value = updatedUserData;
+      localStorage.setItem('psg_user', JSON.stringify(updatedUserData));
     }
   }
-  console.log(user)
-  return { user, loggedIn, setToken, unsetToken,updateUser };
+
+  return {
+    user,
+    loggedIn,
+    authToken,
+    setToken,
+    unsetToken,
+    updateUser,
+  };
 });
