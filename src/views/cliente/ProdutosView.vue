@@ -34,7 +34,7 @@ const mostrarFiltro = ref(false)
 main {
   display: flex;
   justify-content: center;
-  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Botão mobile escondido no desktop */
